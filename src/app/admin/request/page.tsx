@@ -42,8 +42,32 @@ export default function RequestW9Form() {
 
       console.log('Direct form link generated:', formLink)
 
-      // TODO: Send email with direct form link to vendor
-      // For now, we'll just show the link in console and redirect to success
+      // Send email with direct form link to vendor
+      try {
+        const emailResponse = await fetch('/api/send-w9-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            requestId: request.id,
+            vendorName,
+            vendorEmail,
+          }),
+        })
+
+        const emailResult = await emailResponse.json()
+
+        if (!emailResponse.ok) {
+          throw new Error(emailResult.error || 'Failed to send email')
+        }
+
+        console.log('✅ Email sent successfully:', emailResult)
+      } catch (emailError) {
+        console.error('⚠️ Email sending failed:', emailError)
+        // Don't fail the entire request if email fails
+        // The form link is still valid and can be shared manually
+      }
 
       // Redirect to success page
       router.push('/request/success')
