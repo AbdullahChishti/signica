@@ -13,7 +13,7 @@ export function Navigation({ currentPage, showUserAvatar = true }: NavigationPro
         <div className="flex items-center space-x-8">
           <Link href="/" className="flex items-center space-x-2">
             <div className="w-6 h-6 rounded" style={{ backgroundColor: '#4793ea' }}></div>
-            <span className="text-xl font-semibold text-gray-900">TaxForms</span>
+            <span className="text-xl font-semibold text-gray-900">Signica</span>
           </Link>
           
           {/* Navigation */}

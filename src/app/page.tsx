@@ -19,12 +19,11 @@ export default function FormW9Landing() {
                     IRS Compliant & Secure
                   </div>
                   <h1 className="text-3xl font-bold leading-tight tracking-tight text-foreground md:text-4xl lg:text-5xl">
-                    Simplify Your<br />
-                    <span className="text-primary">Form W9</span> Process
+                    W-9s Made<br />
+                    <span className="text-primary">Ridiculously Simple</span>
                   </h1>
                   <p className="text-lg font-normal leading-relaxed text-muted-foreground max-w-xl lg:max-w-2xl">
-                    Streamline W-9 collection and management with our secure, user-friendly platform.
-                    Save time, reduce errors, and stay compliant.
+                    Stop chasing vendors for tax forms. Signica automates the entire W-9 process—from request to download.
                   </p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4 self-center lg:self-start">
@@ -77,12 +76,11 @@ export default function FormW9Landing() {
                   Powerful Features
                 </div>
                 <h2 className="text-2xl font-bold leading-tight tracking-tight text-foreground md:text-3xl lg:text-4xl">
-                  Everything you need to manage<br />
-                  <span className="text-primary">W-9 forms efficiently</span>
+                  Three clicks.<br />
+                  <span className="text-primary">Zero headaches.</span>
                 </h2>
                 <p className="mx-auto max-w-2xl text-lg font-normal leading-relaxed text-muted-foreground lg:max-w-3xl">
-                  From secure collection to automated reporting, our platform handles every aspect of W-9 management
-                  so you can focus on growing your business.
+                  Send requests, track progress, download forms. That's it. No more email chains or missing paperwork.
                 </p>
               </div>
 
@@ -92,9 +90,9 @@ export default function FormW9Landing() {
                     <Shield className="h-7 w-7" />
                   </div>
                   <div className="flex flex-col gap-3">
-                    <h3 className="text-xl font-bold leading-tight text-foreground">Bank-Level Security</h3>
+                    <h3 className="text-xl font-bold leading-tight text-foreground">Fort Knox Security</h3>
                     <p className="text-base font-normal leading-relaxed text-muted-foreground">
-                      256-bit SSL encryption, SOC 2 compliance, and secure data storage ensure your sensitive information stays protected.
+                      256-bit encryption and SOC 2 compliance. Your data is safer than your lunch in the office fridge.
                     </p>
                   </div>
                 </div>
@@ -104,9 +102,9 @@ export default function FormW9Landing() {
                     <Users className="h-7 w-7" />
                   </div>
                   <div className="flex flex-col gap-3">
-                    <h3 className="text-xl font-bold leading-tight text-foreground">Intuitive Experience</h3>
+                    <h3 className="text-xl font-bold leading-tight text-foreground">Actually User-Friendly</h3>
                     <p className="text-base font-normal leading-relaxed text-muted-foreground">
-                      Clean, modern interface that guides users through the W-9 process step-by-step with helpful tooltips and validation.
+                      So simple, even your most tech-challenged vendor will breeze through it. No PhD required.
                     </p>
                   </div>
                 </div>
@@ -116,9 +114,9 @@ export default function FormW9Landing() {
                     <BarChart3 className="h-7 w-7" />
                   </div>
                   <div className="flex flex-col gap-3">
-                    <h3 className="text-xl font-bold leading-tight text-foreground">Smart Analytics</h3>
+                    <h3 className="text-xl font-bold leading-tight text-foreground">Crystal Ball Insights</h3>
                     <p className="text-base font-normal leading-relaxed text-muted-foreground">
-                      Real-time dashboards, automated reports, and compliance tracking to keep you informed and audit-ready.
+                      Real-time tracking and automated reports. Know exactly who's done and who needs a gentle nudge.
                     </p>
                   </div>
                 </div>
@@ -133,10 +131,10 @@ export default function FormW9Landing() {
             <div className="flex flex-col items-center gap-6 text-center md:gap-8 max-w-4xl mx-auto">
               <div className="flex flex-col gap-4">
                 <h2 className="text-2xl font-bold leading-tight tracking-tight text-white md:text-3xl lg:text-4xl">
-                  Ready to get started?
+                  Ready to ditch the chaos?
                 </h2>
                 <p className="text-lg font-normal leading-relaxed text-white/90 max-w-2xl mx-auto">
-                  Join thousands of businesses streamlining their W-9 collection process. Get started in minutes.
+                  Join thousands who've escaped W-9 madness. Setup takes 2 minutes, sanity restoration is immediate.
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-4 w-full max-w-md">
@@ -166,10 +164,10 @@ export default function FormW9Landing() {
                 <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
                   <Shield className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-xl font-bold text-foreground">Form W9 App</span>
+                <span className="text-xl font-bold text-foreground">Signica</span>
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Streamline your W-9 collection process with our secure, compliant platform trusted by thousands of businesses.
+                The smart way to collect W-9 forms. Trusted by thousands who value their time and sanity.
               </p>
             </div>
 
@@ -234,7 +232,7 @@ export default function FormW9Landing() {
           {/* Bottom Bar */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-8 border-t border-muted-foreground/10">
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} Form W9 App. All rights reserved.
+              © {new Date().getFullYear()} Signica. All rights reserved.
             </p>
             <div className="flex items-center gap-4">
               <span className="text-xs text-muted-foreground">Made with ❤️ for businesses</span>

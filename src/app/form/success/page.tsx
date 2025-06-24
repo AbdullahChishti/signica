@@ -13,7 +13,7 @@ export default function FormSuccessPage() {
               <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
                 <Shield className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-foreground">Form W9 App</span>
+              <span className="text-xl font-bold text-foreground">Signica</span>
             </Link>
 
             <div className="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">

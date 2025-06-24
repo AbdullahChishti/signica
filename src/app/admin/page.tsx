@@ -72,7 +72,7 @@ export default function AdminDashboard() {
                 <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
                   <Plus className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-xl font-bold text-foreground">Form W9 App</span>
+                <span className="text-xl font-bold text-foreground">Signica</span>
               </Link>
 
               {/* Navigation */}
@@ -112,10 +112,10 @@ export default function AdminDashboard() {
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-                W-9 Requests
+                W-9 Command Center
               </h1>
               <p className="text-lg text-muted-foreground mt-2">
-                Manage and track all your Form W-9 requests in one place
+                Your mission control for W-9 forms. Track requests, celebrate completions.
               </p>
             </div>
             <Link href="/admin/request">

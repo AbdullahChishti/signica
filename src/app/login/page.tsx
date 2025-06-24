@@ -61,11 +61,11 @@ export default function LoginPage() {
                   Welcome back
                 </h1>
                 <p className="mt-3 text-lg text-muted-foreground">
-                  Sign in to your Form W9 App account
+                  Sign in to your Signica account
                 </p>
                 <div className="mt-4 inline-flex items-center rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
                   <Shield className="w-4 h-4 mr-2" />
-                  Demo: admin@formw9.com / admin123
+                  Demo: admin@signica.com / admin123
                 </div>
               </div>
 
@@ -86,7 +86,7 @@ export default function LoginPage() {
                     className="flex w-full rounded-xl border border-input bg-background px-4 py-3 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
                     id="email"
                     name="email"
-                    placeholder="admin@formw9.com"
+                    placeholder="admin@signica.com"
                     required
                     type="email"
                     value={email}
@@ -153,7 +153,7 @@ export default function LoginPage() {
                     <span className="w-full border-t border-muted-foreground/20" />
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-card px-2 text-muted-foreground">New to Form W9 App?</span>
+                    <span className="bg-card px-2 text-muted-foreground">New to Signica?</span>
                   </div>
                 </div>
 

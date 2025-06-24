@@ -43,7 +43,7 @@ export default function SignUpPage() {
                   Create Your Account
                 </h1>
                 <p className="mt-3 text-lg text-muted-foreground">
-                  Join thousands of businesses streamlining their W-9 process
+                  Join thousands who've escaped W-9 chaos with Signica
                 </p>
                 <div className="mt-4 inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-700">
                   <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>

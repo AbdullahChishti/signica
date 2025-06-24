@@ -26,7 +26,7 @@ export default function Header() {
                 </svg>
               </div>
               <span className="text-xl font-bold text-foreground">
-                Form W9 App
+                Signica
               </span>
             </Link>
 

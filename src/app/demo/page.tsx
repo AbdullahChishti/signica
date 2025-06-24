@@ -16,11 +16,10 @@ export default function DemoPage() {
             Interactive Demo
           </div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-5xl mb-6">
-            Explore Form W9 App
+            Explore Signica
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Navigate through all features and pages of our comprehensive W-9 management platform.
-            Experience the complete workflow from request to completion.
+            Take a spin through our W-9 platform. See how we turn tax form chaos into organized bliss.
           </p>
         </div>
 
