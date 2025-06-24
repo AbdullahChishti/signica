@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -10,8 +11,10 @@ import { Textarea } from "@/components/ui/textarea"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Shield } from "lucide-react"
 import Link from "next/link"
+import { getW9RequestById, submitW9FormData } from "@/lib/database"
+import type { W9Request } from "@/lib/supabase"
 
-export default function W9FormCompletion() {
+export default function W9FormCompletion({ params }: { params: { id: string } }) {
   const [formData, setFormData] = useState({
     legalName: "",
     businessName: "",
@@ -24,9 +27,116 @@ export default function W9FormCompletion() {
     zipCode: "",
     signature: "",
   })
+  const [request, setRequest] = useState<W9Request | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState('')
+  const [signatureType, setSignatureType] = useState<'typed' | 'drawn'>('typed')
+  const router = useRouter()
+
+  // Load W9 request data
+  useEffect(() => {
+    loadRequest()
+  }, [params.id])
+
+  const loadRequest = async () => {
+    try {
+      setLoading(true)
+      setError('')
+
+      const requestData = await getW9RequestById(params.id)
+
+      if (!requestData) {
+        setError('W-9 request not found or has expired')
+        return
+      }
+
+      if (requestData.status === 'completed') {
+        setError('This W-9 form has already been completed')
+        return
+      }
+
+      setRequest(requestData)
+    } catch (error: any) {
+      console.error('Error loading request:', error)
+      setError('Failed to load W-9 request')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!request || submitting) return
+
+    // Validate required fields
+    const requiredFields = ['legalName', 'taxClassification', 'ssnEin', 'streetAddress', 'city', 'state', 'zipCode', 'signature']
+    const missingFields = requiredFields.filter(field => !formData[field as keyof typeof formData])
+
+    if (missingFields.length > 0) {
+      setError('Please fill in all required fields')
+      return
+    }
+
+    setSubmitting(true)
+    setError('')
+
+    try {
+      await submitW9FormData({
+        request_id: request.id,
+        legal_name: formData.legalName,
+        business_name: formData.businessName || undefined,
+        tax_classification: formData.taxClassification,
+        ssn_ein: formData.ssnEin,
+        street_address: formData.streetAddress,
+        apartment: formData.apartment || undefined,
+        city: formData.city,
+        state: formData.state,
+        zip_code: formData.zipCode,
+        signature: formData.signature,
+        signature_type: signatureType
+      })
+
+      // Redirect to success page
+      router.push('/form/success')
+    } catch (error: any) {
+      console.error('Error submitting form:', error)
+      setError(error.message || 'Failed to submit form')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading W-9 form...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error && !request) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100 flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto p-8">
+          <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+            <Shield className="w-8 h-8 text-red-600" />
+          </div>
+          <h1 className="text-2xl font-bold text-foreground mb-2">Unable to Load Form</h1>
+          <p className="text-muted-foreground mb-6">{error}</p>
+          <Link href="/">
+            <Button>Return to Home</Button>
+          </Link>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -75,7 +185,7 @@ export default function W9FormCompletion() {
               Complete your W-9 Information
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Please provide your tax information for <span className="font-semibold text-foreground">[Company Name]</span>.
+              Please provide your tax information for <span className="font-semibold text-foreground">{request?.vendor_name || 'the requesting company'}</span>.
               All information is encrypted and securely stored.
             </p>
           </div>
@@ -96,8 +206,14 @@ export default function W9FormCompletion() {
             </div>
 
             <div className="p-8 md:p-12">
+              {/* Error Message */}
+              {error && (
+                <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200">
+                  <p className="text-sm text-red-600">{error}</p>
+                </div>
+              )}
 
-              <form className="space-y-8">
+              <form className="space-y-8" onSubmit={handleSubmit}>
                 {/* Personal Information Section */}
                 <div className="space-y-6">
                   <div className="flex items-center space-x-3 mb-6">
@@ -266,7 +382,7 @@ export default function W9FormCompletion() {
                   <div className="space-y-4">
                     <Label className="text-base font-semibold text-foreground">Digital Signature</Label>
 
-                    <Tabs defaultValue="type" className="w-full">
+                    <Tabs defaultValue="type" className="w-full" onValueChange={(value) => setSignatureType(value as 'typed' | 'drawn')}>
                       <TabsList className="grid w-full grid-cols-2 rounded-xl">
                         <TabsTrigger value="type" className="rounded-lg">Type Signature</TabsTrigger>
                         <TabsTrigger value="draw" className="rounded-lg">Draw Signature</TabsTrigger>
@@ -277,6 +393,7 @@ export default function W9FormCompletion() {
                           value={formData.signature}
                           onChange={(e) => handleInputChange("signature", e.target.value)}
                           className="w-full h-32 resize-none rounded-xl border border-input bg-background px-4 py-3 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
+                          required
                         />
                         <p className="text-sm text-muted-foreground">Type your full legal name. This serves as your electronic signature.</p>
                       </TabsContent>
@@ -294,12 +411,23 @@ export default function W9FormCompletion() {
 
                 {/* Submit Button */}
                 <div className="pt-8">
-                  <Link href="/form/success">
-                    <Button className="inline-flex items-center justify-center rounded-xl text-base font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-xl h-14 px-8 w-full">
-                      <Shield className="w-5 h-5 mr-2" />
-                      Submit & Generate W-9 Form
-                    </Button>
-                  </Link>
+                  <Button
+                    type="submit"
+                    disabled={submitting}
+                    className="inline-flex items-center justify-center rounded-xl text-base font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-xl h-14 px-8 w-full"
+                  >
+                    {submitting ? (
+                      <>
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+                        Submitting Form...
+                      </>
+                    ) : (
+                      <>
+                        <Shield className="w-5 h-5 mr-2" />
+                        Submit & Generate W-9 Form
+                      </>
+                    )}
+                  </Button>
                 </div>
               </form>
 
