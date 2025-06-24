@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { Plus } from "lucide-react"
+import { Plus, TrendingUp, Users, CheckCircle, Clock, Download, Eye, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -50,48 +50,70 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading dashboard...</p>
+          <div className="w-12 h-12 border-3 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
+          <p className="text-lg text-gray-600 font-medium">Loading your command center...</p>
         </div>
       </div>
     )
   }
+
   return (
     <RequireAuth>
-      <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 to-blue-100">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
         <Header />
 
         {/* Main Content */}
-        <main className="container mx-auto px-6 py-8 lg:px-8">
+        <main className="container mx-auto px-6 py-12 lg:px-8 max-w-7xl">
+          
           {/* Page Header */}
-          <div className="mb-8">
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div>
-                <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-                  W-9 Command Center
-                </h1>
-                <p className="text-lg text-muted-foreground mt-2">
-                  Your mission control for W-9 forms. Track requests, celebrate completions.
-                </p>
-              </div>
-              <Link href="/admin/request">
-                <Button className="inline-flex items-center justify-center rounded-xl text-base font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-xl h-12 px-6">
-                  <Plus className="w-5 h-5 mr-2" />
-                  New W-9 Request
-                </Button>
-              </Link>
+          <div className="mb-16 text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 to-blue-600/10 border border-primary/20 mb-6">
+              <Sparkles className="w-4 h-4 text-primary" />
+              <span className="text-sm font-medium text-primary">Mission Control</span>
             </div>
+
+            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+              W-9 Command
+              <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent block">
+                Center
+              </span>
+            </h1>
+            
+            <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
+              Your mission control for W-9 forms. Track requests, monitor progress, and celebrate completions.
+            </p>
+
+            <Link href="/admin/request">
+              <Button 
+                size="lg" 
+                className="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white font-medium px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 group"
+              >
+                <Plus className="w-5 h-5 mr-2" />
+                Create New Request
+                <div className="ml-2 group-hover:translate-x-0.5 transition-transform">
+                  →
+                </div>
+              </Button>
+            </Link>
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200">
-              <p className="text-sm text-red-600">{error}</p>
+            <div 
+              className="mb-8 p-6 rounded-2xl bg-red-50/80 backdrop-blur-sm border border-red-200/60"
+              style={{
+                boxShadow: `
+                  0 10px 25px -5px rgba(239, 68, 68, 0.1),
+                  0 4px 10px -2px rgba(239, 68, 68, 0.05)
+                `
+              }}
+            >
+              <p className="text-red-700 font-medium">{error}</p>
               <button
                 onClick={loadData}
-                className="mt-2 text-sm text-red-700 hover:text-red-800 underline"
+                className="mt-3 text-red-800 hover:text-red-900 underline underline-offset-2 transition-colors"
               >
                 Try again
               </button>
@@ -99,117 +121,221 @@ export default function AdminDashboard() {
           )}
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="rounded-2xl border bg-card p-6 shadow-sm">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Total Requests</p>
-                  <p className="text-3xl font-bold text-foreground">{stats.total}</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            
+            {/* Total Requests Card */}
+            <div 
+              className="bg-white/90 backdrop-blur-sm border border-gray-200/60 rounded-3xl p-8 group hover:scale-105 transition-all duration-300"
+              style={{
+                boxShadow: `
+                  0 25px 50px -12px rgba(0, 0, 0, 0.15),
+                  0 10px 20px -8px rgba(0, 0, 0, 0.1),
+                  0 4px 15px -3px rgba(0, 0, 0, 0.05)
+                `
+              }}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-primary/20 to-blue-600/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <TrendingUp className="w-8 h-8 text-primary" />
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <Plus className="w-6 h-6 text-primary" />
+                <div className="text-right">
+                  <p className="text-sm font-medium text-gray-500 mb-1">Total Requests</p>
+                  <p className="text-4xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+                    {stats.total}
+                  </p>
                 </div>
               </div>
+              <p className="text-sm text-gray-600">
+                {stats.total > 0 
+                  ? `${Math.round((stats.completed / stats.total) * 100)}% completion rate`
+                  : "Ready to start collecting"
+                }
+              </p>
             </div>
 
-            <div className="rounded-2xl border bg-card p-6 shadow-sm">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Completed</p>
-                  <p className="text-3xl font-bold text-foreground">{stats.completed}</p>
+            {/* Completed Card */}
+            <div 
+              className="bg-white/90 backdrop-blur-sm border border-gray-200/60 rounded-3xl p-8 group hover:scale-105 transition-all duration-300"
+              style={{
+                boxShadow: `
+                  0 25px 50px -12px rgba(0, 0, 0, 0.15),
+                  0 10px 20px -8px rgba(0, 0, 0, 0.1),
+                  0 4px 15px -3px rgba(0, 0, 0, 0.05)
+                `
+              }}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-green-100 to-emerald-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <CheckCircle className="w-8 h-8 text-green-600" />
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center">
-                  <Plus className="w-6 h-6 text-green-600" />
+                <div className="text-right">
+                  <p className="text-sm font-medium text-gray-500 mb-1">Completed</p>
+                  <p className="text-4xl font-bold text-green-600">
+                    {stats.completed}
+                  </p>
                 </div>
               </div>
+              <p className="text-sm text-gray-600">
+                {stats.completed > 0 
+                  ? "Ready for download"
+                  : "Waiting for completions"
+                }
+              </p>
             </div>
 
-            <div className="rounded-2xl border bg-card p-6 shadow-sm">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Pending</p>
-                  <p className="text-3xl font-bold text-foreground">{stats.pending}</p>
+            {/* Pending Card */}
+            <div 
+              className="bg-white/90 backdrop-blur-sm border border-gray-200/60 rounded-3xl p-8 group hover:scale-105 transition-all duration-300"
+              style={{
+                boxShadow: `
+                  0 25px 50px -12px rgba(0, 0, 0, 0.15),
+                  0 10px 20px -8px rgba(0, 0, 0, 0.1),
+                  0 4px 15px -3px rgba(0, 0, 0, 0.05)
+                `
+              }}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-amber-100 to-yellow-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <Clock className="w-8 h-8 text-amber-600" />
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-yellow-100 flex items-center justify-center">
-                  <Plus className="w-6 h-6 text-yellow-600" />
+                <div className="text-right">
+                  <p className="text-sm font-medium text-gray-500 mb-1">Pending</p>
+                  <p className="text-4xl font-bold text-amber-600">
+                    {stats.pending}
+                  </p>
                 </div>
               </div>
+              <p className="text-sm text-gray-600">
+                {stats.pending > 0 
+                  ? "Awaiting vendor response"
+                  : "All caught up!"
+                }
+              </p>
             </div>
           </div>
 
           {/* Requests Table */}
-          <div className="rounded-2xl border bg-card shadow-sm overflow-hidden">
-
-            <div className="px-6 py-4 border-b border-border">
-              <h2 className="text-xl font-semibold text-foreground">Recent Requests</h2>
-              <p className="text-sm text-muted-foreground mt-1">Track the status of all W-9 form requests</p>
+          <div 
+            className="bg-white/90 backdrop-blur-sm border border-gray-200/60 rounded-3xl overflow-hidden"
+            style={{
+              boxShadow: `
+                0 25px 50px -12px rgba(0, 0, 0, 0.25),
+                0 10px 20px -8px rgba(0, 0, 0, 0.15),
+                0 4px 15px -3px rgba(0, 0, 0, 0.1)
+              `
+            }}
+          >
+            {/* Table Header */}
+            <div className="px-8 py-6 border-b border-gray-200/60 bg-gradient-to-r from-gray-50/50 to-gray-100/50">
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Recent Requests</h2>
+              <p className="text-gray-600">
+                Track the status of all W-9 form requests
+              </p>
             </div>
 
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow className="border-b border-border">
-                    <TableHead className="font-semibold text-foreground px-6 py-4">Vendor</TableHead>
-                    <TableHead className="font-semibold text-foreground px-6 py-4">Contact</TableHead>
-                    <TableHead className="font-semibold text-foreground px-6 py-4">Status</TableHead>
-                    <TableHead className="font-semibold text-foreground px-6 py-4">Actions</TableHead>
+                  <TableRow className="border-b border-gray-200/60 hover:bg-transparent">
+                    <TableHead className="font-semibold text-gray-900 px-8 py-6 text-left">Vendor</TableHead>
+                    <TableHead className="font-semibold text-gray-900 px-8 py-6 text-left">Contact</TableHead>
+                    <TableHead className="font-semibold text-gray-900 px-8 py-6 text-left">Status</TableHead>
+                    <TableHead className="font-semibold text-gray-900 px-8 py-6 text-left">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {requests.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={4} className="px-6 py-12 text-center">
-                        <div className="flex flex-col items-center space-y-4">
-                          <div className="w-16 h-16 rounded-full bg-muted/50 flex items-center justify-center">
-                            <Plus className="w-8 h-8 text-muted-foreground" />
+                      <TableCell colSpan={4} className="px-8 py-16 text-center">
+                        <div className="flex flex-col items-center space-y-6">
+                          <div 
+                            className="w-24 h-24 rounded-3xl bg-gradient-to-r from-primary/10 to-blue-600/10 flex items-center justify-center"
+                            style={{
+                              boxShadow: `
+                                0 10px 25px -5px rgba(99, 102, 241, 0.1),
+                                0 4px 10px -2px rgba(99, 102, 241, 0.05)
+                              `
+                            }}
+                          >
+                            <Users className="w-12 h-12 text-primary" />
                           </div>
                           <div>
-                            <p className="text-lg font-medium text-foreground">No W-9 requests yet</p>
-                            <p className="text-sm text-muted-foreground">Create your first request to get started</p>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-2">No W-9 requests yet</h3>
+                            <p className="text-gray-600 mb-6 max-w-md">
+                              Create your first request to start collecting W-9 forms from your vendors
+                            </p>
+                            <Link href="/admin/request">
+                              <Button 
+                                size="lg"
+                                className="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white font-medium px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+                              >
+                                <Plus className="w-5 h-5 mr-2" />
+                                Create First Request
+                              </Button>
+                            </Link>
                           </div>
-                          <Link href="/admin/request">
-                            <Button className="mt-4">
-                              <Plus className="w-4 h-4 mr-2" />
-                              Create First Request
-                            </Button>
-                          </Link>
                         </div>
                       </TableCell>
                     </TableRow>
                   ) : (
                     requests.map((request) => (
-                      <TableRow key={request.id} className="border-b border-border hover:bg-muted/50 transition-colors">
-                        <TableCell className="px-6 py-4">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                              <span className="text-sm font-semibold text-primary">{request.vendor_name.charAt(0)}</span>
+                      <TableRow key={request.id} className="border-b border-gray-200/60 hover:bg-gray-50/50 transition-all duration-200">
+                        <TableCell className="px-8 py-6">
+                          <div className="flex items-center space-x-4">
+                            <div 
+                              className="w-12 h-12 rounded-2xl bg-gradient-to-r from-primary/20 to-blue-600/20 flex items-center justify-center"
+                              style={{
+                                boxShadow: `0 4px 10px -2px rgba(99, 102, 241, 0.1)`
+                              }}
+                            >
+                              <span className="text-sm font-bold text-primary">
+                                {request.vendor_name.charAt(0)}
+                              </span>
                             </div>
                             <div>
-                              <p className="font-medium text-foreground">{request.vendor_name}</p>
-                              <p className="text-sm text-muted-foreground">Vendor</p>
+                              <p className="font-semibold text-gray-900 text-lg">{request.vendor_name}</p>
+                              <p className="text-sm text-gray-500">Vendor</p>
                             </div>
                           </div>
                         </TableCell>
-                        <TableCell className="px-6 py-4">
-                          <p className="text-primary hover:text-primary/80 cursor-pointer font-medium">{request.vendor_email}</p>
+                        <TableCell className="px-8 py-6">
+                          <p className="text-primary hover:text-primary/80 cursor-pointer font-medium transition-colors">
+                            {request.vendor_email}
+                          </p>
                         </TableCell>
-                        <TableCell className="px-6 py-4">
+                        <TableCell className="px-8 py-6">
                           <Badge
-                            variant={request.status === "completed" ? "success" : request.status === "pending" ? "warning" : "secondary"}
-                            className="font-medium capitalize"
+                            variant={request.status === "completed" ? "default" : request.status === "pending" ? "secondary" : "secondary"}
+                            className={`font-medium capitalize px-4 py-2 rounded-xl ${
+                              request.status === "completed" 
+                                ? "bg-green-100 text-green-700 hover:bg-green-200" 
+                                : request.status === "pending" 
+                                ? "bg-amber-100 text-amber-700 hover:bg-amber-200"
+                                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                            }`}
                           >
                             {request.status}
                           </Badge>
                         </TableCell>
-                        <TableCell className="px-6 py-4">
-                          <div className="flex items-center space-x-2">
+                        <TableCell className="px-8 py-6">
+                          <div className="flex items-center space-x-3">
                             <Link href={`/form/${request.id}`}>
-                              <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                className="border-gray-300 hover:border-primary hover:text-primary transition-all duration-200 rounded-xl"
+                              >
+                                <Eye className="w-4 h-4 mr-2" />
                                 View Form
                               </Button>
                             </Link>
                             {request.status === 'completed' && (
-                              <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                className="border-green-300 text-green-700 hover:border-green-500 hover:text-green-800 transition-all duration-200 rounded-xl"
+                              >
+                                <Download className="w-4 h-4 mr-2" />
                                 Download
                               </Button>
                             )}
