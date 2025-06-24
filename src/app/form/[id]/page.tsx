@@ -14,6 +14,7 @@ import Link from "next/link"
 import { getW9RequestById, submitW9FormData } from "@/lib/database"
 import type { W9Request } from "@/lib/supabase"
 import Header from "@/components/Header"
+import { PageLoader, ButtonLoader } from "@/components/ui/loader"
 
 export default function W9FormCompletion({ params }: { params: Promise<{ id: string }> }) {
   const [formData, setFormData] = useState({
@@ -130,12 +131,7 @@ export default function W9FormCompletion({ params }: { params: Promise<{ id: str
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading W-9 form...</p>
-        </div>
-      </div>
+      <PageLoader text="Loading W-9 form..." />
     )
   }
 
@@ -406,7 +402,7 @@ export default function W9FormCompletion({ params }: { params: Promise<{ id: str
                   >
                     {submitting ? (
                       <>
-                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+                        <ButtonLoader size="sm" />
                         Submitting Form...
                       </>
                     ) : (

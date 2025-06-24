@@ -7,6 +7,8 @@ import { ArrowRight, Eye, EyeOff, Sparkles } from "lucide-react"
 import Header from "@/components/Header"
 import { supabase } from "@/lib/supabase"
 import { RequireNoAuth } from "@/components/AuthGuard"
+import { ButtonLoader } from "@/components/ui/loader"
+import { Button } from "@/components/ui/button"
 
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -211,23 +213,24 @@ export default function SignUpPage() {
                 </div>
 
                 {/* Create Account Button */}
-                <button
-                  type="submit"
+                <Button 
+                  type="submit" 
+                  size="lg"
                   disabled={isLoading}
-                  className="w-full bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white font-semibold py-4 px-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed group"
+                  className="w-full bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white font-semibold py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 group"
                 >
                   {isLoading ? (
-                    <div className="flex items-center justify-center">
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-3"></div>
-                      Creating account...
-                    </div>
+                    <>
+                      <ButtonLoader size="sm" />
+                      Creating Account...
+                    </>
                   ) : (
-                    <div className="flex items-center justify-center">
-                      Create account
-                      <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-0.5 transition-transform" />
-                    </div>
+                    <>
+                      <Sparkles className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
+                      Create Account
+                    </>
                   )}
-                </button>
+                </Button>
               </form>
 
               {/* Footer Links */}

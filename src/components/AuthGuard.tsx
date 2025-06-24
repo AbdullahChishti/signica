@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
+import { PageLoader } from '@/components/ui/loader'
 
 interface AuthGuardProps {
   children: React.ReactNode
@@ -21,21 +22,17 @@ export default function AuthGuard({
   useEffect(() => {
     console.log(`🔍 AUTH_GUARD: Effect - initialized: ${isInitialized}, loading: ${isLoading}`)
     
-    // Don't redirect until auth is initialized
+    // Don't redirect until auth is fully initialized
     if (!isInitialized || isLoading) return
 
-    // If auth is required but user is not logged in, redirect to login
     if (requireAuth && !user) {
-      console.log(`🔄 AUTH_GUARD: Auth required but no user, redirecting to login`)
+      console.log(`🔒 AUTH_GUARD: Redirecting to login - no user found`)
       router.push('/login')
-      return
-    }
-
-    // If auth is not required but user is logged in, redirect to admin
-    if (!requireAuth && user) {
-      console.log(`🔄 AUTH_GUARD: User logged in on auth page, redirecting to admin`)
+    } else if (!requireAuth && user) {
+      console.log(`🏠 AUTH_GUARD: Redirecting to admin - user logged in`)
       router.push('/admin')
-      return
+    } else {
+      console.log(`✅ AUTH_GUARD: Auth state valid`)
     }
   }, [user, isInitialized, isLoading, requireAuth, router])
 
@@ -43,12 +40,7 @@ export default function AuthGuard({
   if (!isInitialized || isLoading) {
     console.log(`⏳ AUTH_GUARD: Showing loading - initialized: ${isInitialized}, loading: ${isLoading}`)
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
-      </div>
+      <PageLoader text="Initializing..." />
     )
   }
 
@@ -56,29 +48,20 @@ export default function AuthGuard({
   if (requireAuth && !user) {
     console.log(`🔐 AUTH_GUARD: Auth required but no user, showing redirect loading`)
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Redirecting to login...</p>
-        </div>
-      </div>
+      <PageLoader text="Redirecting to login..." />
     )
   }
 
-  // If auth is not required but user is logged in, show loading (redirect will happen)
+  // If auth is not required but user is logged in, show loading (redirect will happen)  
   if (!requireAuth && user) {
     console.log(`🔄 AUTH_GUARD: User logged in on auth page, showing redirect loading`)
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Redirecting...</p>
-        </div>
-      </div>
+      <PageLoader text="Redirecting to dashboard..." />
     )
   }
 
-  console.log(`✅ AUTH_GUARD: All checks passed, rendering children`)
+  // If we get here, auth state is valid for the requirement
+  console.log(`✅ AUTH_GUARD: Rendering children`)
   return <>{children}</>
 }
 

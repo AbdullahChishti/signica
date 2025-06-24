@@ -11,6 +11,7 @@ import Header from "@/components/Header"
 import { getW9Requests, getW9RequestStats } from "@/lib/database"
 import { RequireAuth } from "@/components/AuthGuard"
 import type { W9Request } from "@/lib/supabase"
+import { CardLoader } from "@/components/ui/loader"
 
 // Remove hardcoded data - we'll use real Supabase data
 
@@ -50,11 +51,13 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-12 h-12 border-3 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
-          <p className="text-lg text-gray-600 font-medium">Loading your command center...</p>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
+        <Header />
+        <main className="container mx-auto px-6 py-12 lg:px-8 max-w-6xl">
+          <div className="flex justify-center items-center" style={{ minHeight: '400px' }}>
+            <CardLoader text="Loading your command center..." />
+          </div>
+        </main>
       </div>
     )
   }

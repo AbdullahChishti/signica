@@ -12,6 +12,7 @@ import { useAuth } from "@/contexts/AuthContext"
 import { createW9Request, generateDirectFormLink } from "@/lib/database"
 import { RequireAuth } from "@/components/AuthGuard"
 import Header from "@/components/Header"
+import { ButtonLoader } from "@/components/ui/loader"
 
 export default function RequestW9Form() {
   const [vendorName, setVendorName] = useState('')
@@ -306,21 +307,20 @@ export default function RequestW9Form() {
 
                     {/* Send Request Button */}
                     <div className="pt-6">
-                      <Button
+                      <Button 
                         type="submit"
-                        size="lg"
-                        className="w-full bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white font-semibold px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 group disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={isLoading || !vendorName || !vendorEmail}
+                        className="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white font-semibold px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 group"
                       >
                         {isLoading ? (
                           <>
-                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-3"></div>
-                            Sending Request...
+                            <ButtonLoader size="sm" />
+                            Launching Mission...
                           </>
                         ) : (
                           <>
                             <Send className="w-5 h-5 mr-3 group-hover:translate-x-0.5 transition-transform" />
-                            Send W-9 Request
+                            Launch Mission
                           </>
                         )}
                       </Button>
