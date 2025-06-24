@@ -5,7 +5,8 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Shield, User, Mail, Lock, Eye, EyeOff } from "lucide-react"
 import Header from "@/components/Header"
-import { signUp } from "@/lib/auth"
+import { supabase } from "@/lib/supabase"
+import { RequireNoAuth } from "@/components/AuthGuard"
 
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -48,7 +49,21 @@ export default function SignUpPage() {
     }
 
     try {
-      await signUp(formData.email, formData.password, formData.name)
+      const { data, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: {
+            name: formData.name
+          }
+        }
+      })
+
+      if (error) {
+        setError(error.message)
+        return
+      }
+
       // Redirect to login with success message
       router.push('/login?message=Account created successfully! Please sign in.')
     } catch (error: any) {
@@ -59,7 +74,8 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100">
+    <RequireNoAuth>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100">
       <Header />
 
       {/* Main Content */}
@@ -244,6 +260,7 @@ export default function SignUpPage() {
           </div>
         </div>
       </main>
-    </div>
+      </div>
+    </RequireNoAuth>
   )
 }

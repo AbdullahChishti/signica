@@ -14,7 +14,7 @@ import Link from "next/link"
 import { getW9RequestById, submitW9FormData } from "@/lib/database"
 import type { W9Request } from "@/lib/supabase"
 
-export default function W9FormCompletion({ params }: { params: { id: string } }) {
+export default function W9FormCompletion({ params }: { params: Promise<{ id: string }> }) {
   const [formData, setFormData] = useState({
     legalName: "",
     businessName: "",
@@ -37,10 +37,14 @@ export default function W9FormCompletion({ params }: { params: { id: string } })
 
   // Check for direct access and load W9 request data
   useEffect(() => {
-    checkDirectAccessAndLoadRequest()
-  }, [params.id])
+    const loadData = async () => {
+      const resolvedParams = await params
+      checkDirectAccessAndLoadRequest(resolvedParams.id)
+    }
+    loadData()
+  }, [params])
 
-  const checkDirectAccessAndLoadRequest = async () => {
+  const checkDirectAccessAndLoadRequest = async (requestId: string) => {
     try {
       setLoading(true)
       setError('')
@@ -50,7 +54,7 @@ export default function W9FormCompletion({ params }: { params: { id: string } })
       const isDirect = urlParams.get('direct') === 'true'
       setIsDirectAccess(isDirect)
 
-      const requestData = await getW9RequestById(params.id)
+      const requestData = await getW9RequestById(requestId)
 
       if (!requestData) {
         setError('W-9 request not found or has expired')

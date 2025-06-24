@@ -10,6 +10,7 @@ import { Send } from "lucide-react"
 import Link from "next/link"
 import { useAuth } from "@/contexts/AuthContext"
 import { createW9Request, generateDirectFormLink } from "@/lib/database"
+import { RequireAuth } from "@/components/AuthGuard"
 
 export default function RequestW9Form() {
   const [vendorName, setVendorName] = useState('')
@@ -19,12 +20,7 @@ export default function RequestW9Form() {
   const { user } = useAuth()
   const router = useRouter()
 
-  // Redirect if not logged in
-  useEffect(() => {
-    if (!user) {
-      router.push('/login')
-    }
-  }, [user, router])
+  // Auth guard will handle authentication
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -57,11 +53,10 @@ export default function RequestW9Form() {
     }
   }
 
-  if (!user) {
-    return <div>Redirecting...</div>
-  }
+  // Auth guard handles this
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100">
+    <RequireAuth>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100">
       {/* Modern Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-6 lg:px-8">
@@ -288,6 +283,7 @@ export default function RequestW9Form() {
           </div>
         </div>
       </main>
-    </div>
+      </div>
+    </RequireAuth>
   )
 }

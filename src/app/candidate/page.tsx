@@ -9,6 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import Link from "next/link"
 import { useAuth } from "@/contexts/AuthContext"
 import { getW9RequestsByEmail } from "@/lib/database"
+import { RequireAuth } from "@/components/AuthGuard"
 import type { W9Request } from "@/lib/supabase"
 
 export default function CandidateDashboard() {
@@ -18,12 +19,7 @@ export default function CandidateDashboard() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  // Redirect if not logged in
-  useEffect(() => {
-    if (!user) {
-      router.push('/login')
-    }
-  }, [user, router])
+  // Auth guard will handle authentication
 
   // Load W9 requests for this candidate
   useEffect(() => {
@@ -74,9 +70,7 @@ export default function CandidateDashboard() {
     }
   }
 
-  if (!user) {
-    return <div>Redirecting...</div>
-  }
+  // Auth guard handles this
 
   if (loading) {
     return (
@@ -97,7 +91,8 @@ export default function CandidateDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100">
+    <RequireAuth>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-16 items-center justify-between px-6 lg:px-8">
@@ -109,6 +104,11 @@ export default function CandidateDashboard() {
           </div>
           
           <div className="flex items-center space-x-4">
+            {user?.role.isAdmin && (
+              <Link href="/admin" className="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors">
+                Admin View
+              </Link>
+            )}
             <div className="flex items-center space-x-2">
               <User className="w-4 h-4 text-muted-foreground" />
               <span className="text-sm font-medium text-foreground">{user.name}</span>
@@ -292,6 +292,7 @@ export default function CandidateDashboard() {
           </div>
         </div>
       </main>
-    </div>
+      </div>
+    </RequireAuth>
   )
 }
