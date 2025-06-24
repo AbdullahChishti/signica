@@ -30,7 +30,7 @@ export default function W9FormCompletion() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/30">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100">
       {/* Modern Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-6 lg:px-8">
