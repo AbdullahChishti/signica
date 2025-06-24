@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Plus, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -8,43 +8,18 @@ import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import Link from "next/link"
 import { useAuth } from "@/contexts/AuthContext"
+import { getW9Requests, getW9RequestStats } from "@/lib/database"
+import type { W9Request } from "@/lib/supabase"
 
-const requestsData = [
-  {
-    id: 1,
-    name: "Ethan Carter",
-    email: "ethan.carter@email.com",
-    status: "Pending",
-  },
-  {
-    id: 2,
-    name: "Olivia Bennett",
-    email: "olivia.bennett@email.com",
-    status: "Completed",
-  },
-  {
-    id: 3,
-    name: "Noah Thompson",
-    email: "noah.thompson@email.com",
-    status: "Pending",
-  },
-  {
-    id: 4,
-    name: "Ava Rodriguez",
-    email: "ava.rodriguez@email.com",
-    status: "Completed",
-  },
-  {
-    id: 5,
-    name: "Liam Walker",
-    email: "liam.walker@email.com",
-    status: "Pending",
-  },
-]
+// Remove hardcoded data - we'll use real Supabase data
 
 export default function AdminDashboard() {
   const { user, logout } = useAuth()
   const router = useRouter()
+  const [requests, setRequests] = useState<W9Request[]>([])
+  const [stats, setStats] = useState({ total: 0, pending: 0, completed: 0, expired: 0 })
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
   // Redirect if not logged in
   useEffect(() => {
@@ -53,6 +28,33 @@ export default function AdminDashboard() {
     }
   }, [user, router])
 
+  // Load W9 requests and stats
+  useEffect(() => {
+    if (user) {
+      loadData()
+    }
+  }, [user])
+
+  const loadData = async () => {
+    try {
+      setLoading(true)
+      setError('')
+
+      const [requestsData, statsData] = await Promise.all([
+        getW9Requests(user!.id),
+        getW9RequestStats(user!.id)
+      ])
+
+      setRequests(requestsData)
+      setStats(statsData)
+    } catch (error: any) {
+      console.error('Error loading data:', error)
+      setError('Failed to load data')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleLogout = () => {
     logout()
     router.push('/')
@@ -60,6 +62,17 @@ export default function AdminDashboard() {
 
   if (!user) {
     return <div>Redirecting...</div>
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading dashboard...</p>
+        </div>
+      </div>
+    )
   }
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100">
@@ -127,13 +140,26 @@ export default function AdminDashboard() {
           </div>
         </div>
 
+        {/* Error Message */}
+        {error && (
+          <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200">
+            <p className="text-sm text-red-600">{error}</p>
+            <button
+              onClick={loadData}
+              className="mt-2 text-sm text-red-700 hover:text-red-800 underline"
+            >
+              Try again
+            </button>
+          </div>
+        )}
+
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="rounded-2xl border bg-card p-6 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Total Requests</p>
-                <p className="text-3xl font-bold text-foreground">{requestsData.length}</p>
+                <p className="text-3xl font-bold text-foreground">{stats.total}</p>
               </div>
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
                 <Plus className="w-6 h-6 text-primary" />
@@ -145,7 +171,7 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Completed</p>
-                <p className="text-3xl font-bold text-foreground">{requestsData.filter(r => r.status === 'Completed').length}</p>
+                <p className="text-3xl font-bold text-foreground">{stats.completed}</p>
               </div>
               <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center">
                 <Plus className="w-6 h-6 text-green-600" />
@@ -157,7 +183,7 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Pending</p>
-                <p className="text-3xl font-bold text-foreground">{requestsData.filter(r => r.status === 'Pending').length}</p>
+                <p className="text-3xl font-bold text-foreground">{stats.pending}</p>
               </div>
               <div className="w-12 h-12 rounded-xl bg-yellow-100 flex items-center justify-center">
                 <Plus className="w-6 h-6 text-yellow-600" />
@@ -185,42 +211,68 @@ export default function AdminDashboard() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {requestsData.map((request) => (
-                  <TableRow key={request.id} className="border-b border-border hover:bg-muted/50 transition-colors">
-                    <TableCell className="px-6 py-4">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                          <span className="text-sm font-semibold text-primary">{request.name.charAt(0)}</span>
+                {requests.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={4} className="px-6 py-12 text-center">
+                      <div className="flex flex-col items-center space-y-4">
+                        <div className="w-16 h-16 rounded-full bg-muted/50 flex items-center justify-center">
+                          <Plus className="w-8 h-8 text-muted-foreground" />
                         </div>
                         <div>
-                          <p className="font-medium text-foreground">{request.name}</p>
-                          <p className="text-sm text-muted-foreground">Vendor</p>
+                          <p className="text-lg font-medium text-foreground">No W-9 requests yet</p>
+                          <p className="text-sm text-muted-foreground">Create your first request to get started</p>
                         </div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-6 py-4">
-                      <p className="text-primary hover:text-primary/80 cursor-pointer font-medium">{request.email}</p>
-                    </TableCell>
-                    <TableCell className="px-6 py-4">
-                      <Badge
-                        variant={request.status === "Completed" ? "success" : "warning"}
-                        className="font-medium"
-                      >
-                        {request.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="px-6 py-4">
-                      <div className="flex items-center space-x-2">
-                        <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-                          <LogOut className="w-4 h-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-                          <Plus className="w-4 h-4" />
-                        </Button>
+                        <Link href="/admin/request">
+                          <Button className="mt-4">
+                            <Plus className="w-4 h-4 mr-2" />
+                            Create First Request
+                          </Button>
+                        </Link>
                       </div>
                     </TableCell>
                   </TableRow>
-                ))}
+                ) : (
+                  requests.map((request) => (
+                    <TableRow key={request.id} className="border-b border-border hover:bg-muted/50 transition-colors">
+                      <TableCell className="px-6 py-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                            <span className="text-sm font-semibold text-primary">{request.vendor_name.charAt(0)}</span>
+                          </div>
+                          <div>
+                            <p className="font-medium text-foreground">{request.vendor_name}</p>
+                            <p className="text-sm text-muted-foreground">Vendor</p>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell className="px-6 py-4">
+                        <p className="text-primary hover:text-primary/80 cursor-pointer font-medium">{request.vendor_email}</p>
+                      </TableCell>
+                      <TableCell className="px-6 py-4">
+                        <Badge
+                          variant={request.status === "completed" ? "success" : request.status === "pending" ? "warning" : "destructive"}
+                          className="font-medium capitalize"
+                        >
+                          {request.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="px-6 py-4">
+                        <div className="flex items-center space-x-2">
+                          <Link href={`/form/${request.id}`}>
+                            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+                              View Form
+                            </Button>
+                          </Link>
+                          {request.status === 'completed' && (
+                            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+                              Download
+                            </Button>
+                          )}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
           </div>

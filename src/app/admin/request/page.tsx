@@ -9,11 +9,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Send } from "lucide-react"
 import Link from "next/link"
 import { useAuth } from "@/contexts/AuthContext"
+import { createW9Request } from "@/lib/database"
 
 export default function RequestW9Form() {
   const [vendorName, setVendorName] = useState('')
   const [vendorEmail, setVendorEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
   const { user } = useAuth()
   const router = useRouter()
 
@@ -26,15 +28,25 @@ export default function RequestW9Form() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!vendorName || !vendorEmail) return
+    if (!vendorName || !vendorEmail || !user) return
 
     setIsLoading(true)
+    setError('')
 
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500))
+    try {
+      // Create W9 request in Supabase
+      const request = await createW9Request(vendorName, vendorEmail, user.id)
 
-    // Redirect to success page
-    router.push('/request/success')
+      console.log('W9 request created:', request)
+
+      // Redirect to success page
+      router.push('/request/success')
+    } catch (error: any) {
+      console.error('Error creating W9 request:', error)
+      setError(error.message || 'Failed to create W9 request')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   if (!user) {
@@ -51,7 +63,7 @@ export default function RequestW9Form() {
                 <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
                   <Send className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-xl font-bold text-foreground">Form W9 App</span>
+                <span className="text-xl font-bold text-foreground">Signica</span>
               </Link>
 
               {/* Navigation */}
@@ -199,6 +211,13 @@ export default function RequestW9Form() {
                   <h3 className="text-xl font-semibold text-foreground mb-2">Request Details</h3>
                   <p className="text-sm text-muted-foreground">Enter the vendor information below to send a W-9 request.</p>
                 </div>
+
+                {/* Error Message */}
+                {error && (
+                  <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200">
+                    <p className="text-sm text-red-600">{error}</p>
+                  </div>
+                )}
 
                 <form className="relative space-y-6" onSubmit={handleSubmit}>
                   {/* Vendor Name Field */}
