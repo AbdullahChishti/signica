@@ -32,17 +32,23 @@ export default function W9FormCompletion({ params }: { params: { id: string } })
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [signatureType, setSignatureType] = useState<'typed' | 'drawn'>('typed')
+  const [isMagicLinkAccess, setIsMagicLinkAccess] = useState(false)
   const router = useRouter()
 
-  // Load W9 request data
+  // Check for magic link access and load W9 request data
   useEffect(() => {
-    loadRequest()
+    checkMagicLinkAndLoadRequest()
   }, [params.id])
 
-  const loadRequest = async () => {
+  const checkMagicLinkAndLoadRequest = async () => {
     try {
       setLoading(true)
       setError('')
+
+      // Check if this is magic link access
+      const urlParams = new URLSearchParams(window.location.search)
+      const isMagicLink = urlParams.get('magic_link') === 'true'
+      setIsMagicLinkAccess(isMagicLink)
 
       const requestData = await getW9RequestById(params.id)
 
@@ -56,6 +62,8 @@ export default function W9FormCompletion({ params }: { params: { id: string } })
         return
       }
 
+      // For magic link access, we don't need additional authentication
+      // The magic link already provides temporary authenticated session
       setRequest(requestData)
     } catch (error: any) {
       console.error('Error loading request:', error)

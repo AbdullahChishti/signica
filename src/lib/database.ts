@@ -268,3 +268,33 @@ export async function getW9RequestsByEmail(email: string): Promise<W9Request[]> 
     throw new DatabaseError('Failed to fetch W9 requests by email')
   }
 }
+
+// Magic Link Operations
+export async function generateMagicLinkForW9Request(requestId: string, vendorEmail: string): Promise<string> {
+  try {
+    // Generate magic link that will authenticate the vendor and redirect to the form
+    const { data, error } = await supabase.auth.signInWithOtp({
+      email: vendorEmail,
+      options: {
+        shouldCreateUser: false, // Don't create permanent user accounts
+        data: {
+          request_id: requestId,
+          purpose: 'w9_form_completion'
+        }
+      }
+    })
+
+    if (error) {
+      throw new DatabaseError(`Failed to generate magic link: ${error.message}`)
+    }
+
+    // Return the magic link URL that will be sent via email
+    // Note: In production, you'd customize the redirect URL
+    return `${process.env.NEXT_PUBLIC_SITE_URL}/form/${requestId}?magic_link=true`
+  } catch (error) {
+    if (error instanceof DatabaseError) {
+      throw error
+    }
+    throw new DatabaseError('Failed to generate magic link')
+  }
+}
