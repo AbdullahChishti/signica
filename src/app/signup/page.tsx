@@ -2,20 +2,60 @@
 
 import React, { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Shield, User, Mail, Lock, Eye, EyeOff } from "lucide-react"
 import Header from "@/components/Header"
+import { signUp } from "@/lib/auth"
 
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  })
+  const router = useRouter()
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    setIsLoading(false)
+    setError('')
+
+    // Validate passwords match
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match')
+      setIsLoading(false)
+      return
+    }
+
+    // Validate password strength
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters long')
+      setIsLoading(false)
+      return
+    }
+
+    try {
+      await signUp(formData.email, formData.password, formData.name)
+      // Redirect to login with success message
+      router.push('/login?message=Account created successfully! Please sign in.')
+    } catch (error: any) {
+      setError(error.message || 'Failed to create account')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -51,21 +91,30 @@ export default function SignUpPage() {
                 </div>
               </div>
 
+              {/* Error Message */}
+              {error && (
+                <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200">
+                  <p className="text-sm text-red-600">{error}</p>
+                </div>
+              )}
+
               {/* Signup Form */}
               <form className="space-y-6" onSubmit={handleSubmit}>
                 <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-foreground" htmlFor="full-name">
+                  <label className="block text-sm font-semibold text-foreground" htmlFor="name">
                     Full Name
                   </label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <input
                       className="flex w-full rounded-xl border border-input bg-background pl-10 pr-4 py-3 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
-                      id="full-name"
-                      name="full-name"
+                      id="name"
+                      name="name"
                       placeholder="Enter your full name"
                       required
                       type="text"
+                      value={formData.name}
+                      onChange={handleInputChange}
                     />
                   </div>
                 </div>
@@ -83,6 +132,8 @@ export default function SignUpPage() {
                       placeholder="you@company.com"
                       required
                       type="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
                     />
                   </div>
                 </div>
@@ -100,6 +151,8 @@ export default function SignUpPage() {
                       placeholder="Create a strong password"
                       required
                       type={showPassword ? "text" : "password"}
+                      value={formData.password}
+                      onChange={handleInputChange}
                     />
                     <button
                       type="button"
@@ -112,18 +165,20 @@ export default function SignUpPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-foreground" htmlFor="confirm-password">
+                  <label className="block text-sm font-semibold text-foreground" htmlFor="confirmPassword">
                     Confirm Password
                   </label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <input
                       className="flex w-full rounded-xl border border-input bg-background pl-10 pr-12 py-3 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
-                      id="confirm-password"
-                      name="confirm-password"
+                      id="confirmPassword"
+                      name="confirmPassword"
                       placeholder="Confirm your password"
                       required
                       type={showConfirmPassword ? "text" : "password"}
+                      value={formData.confirmPassword}
+                      onChange={handleInputChange}
                     />
                     <button
                       type="button"

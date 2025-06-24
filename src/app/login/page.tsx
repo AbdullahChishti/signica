@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Shield } from "lucide-react"
 import Link from "next/link"
 import Header from "@/components/Header"
@@ -11,8 +11,18 @@ export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
   const { login, user, isLoading } = useAuth()
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  // Check for success message from signup
+  useEffect(() => {
+    const message = searchParams.get('message')
+    if (message) {
+      setSuccessMessage(message)
+    }
+  }, [searchParams])
 
   // Redirect if already logged in
   useEffect(() => {
@@ -68,6 +78,13 @@ export default function LoginPage() {
                   Demo: admin@signica.com / admin123
                 </div>
               </div>
+
+              {/* Success Message */}
+              {successMessage && (
+                <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl">
+                  <p className="text-sm text-green-600 font-medium">{successMessage}</p>
+                </div>
+              )}
 
               {/* Error Message */}
               {error && (

@@ -1,6 +1,7 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
+import { AuthUser, signIn, signOut, getCurrentUser, onAuthStateChange } from '@/lib/auth'
 
 interface User {
   id: string
@@ -24,41 +25,81 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Check for existing session on mount
   useEffect(() => {
-    const savedUser = localStorage.getItem('user')
-    if (savedUser) {
-      setUser(JSON.parse(savedUser))
+    // Get initial user from Supabase
+    getCurrentUser()
+      .then((authUser) => {
+        if (authUser) {
+          setUser({
+            id: authUser.id,
+            email: authUser.email,
+            name: authUser.name,
+            role: 'admin' // For now, all users are admins
+          })
+        }
+      })
+      .catch((error) => {
+        console.error('Error getting current user:', error)
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
+
+    // Listen for auth state changes
+    const { data: { subscription } } = onAuthStateChange((authUser) => {
+      if (authUser) {
+        setUser({
+          id: authUser.id,
+          email: authUser.email,
+          name: authUser.name,
+          role: 'admin'
+        })
+      } else {
+        setUser(null)
+      }
+      setIsLoading(false)
+    })
+
+    return () => {
+      subscription.unsubscribe()
     }
-    setIsLoading(false)
   }, [])
 
   const login = async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true)
-    
-    // Mock authentication - in real app, this would be an API call
-    await new Promise(resolve => setTimeout(resolve, 1000)) // Simulate API delay
-    
-    // Mock credentials for demo
-    if (email === 'admin@formw9.com' && password === 'admin123') {
-      const mockUser: User = {
-        id: '1',
-        email: 'admin@formw9.com',
-        name: 'Admin User',
-        role: 'admin'
+
+    try {
+      const { user: authUser } = await signIn(email, password)
+
+      if (authUser) {
+        const currentUser = await getCurrentUser()
+        if (currentUser) {
+          setUser({
+            id: currentUser.id,
+            email: currentUser.email,
+            name: currentUser.name,
+            role: 'admin'
+          })
+          setIsLoading(false)
+          return true
+        }
       }
-      
-      setUser(mockUser)
-      localStorage.setItem('user', JSON.stringify(mockUser))
+
       setIsLoading(false)
-      return true
+      return false
+    } catch (error) {
+      console.error('Login error:', error)
+      setIsLoading(false)
+      return false
     }
-    
-    setIsLoading(false)
-    return false
   }
 
-  const logout = () => {
-    setUser(null)
-    localStorage.removeItem('user')
+  const logout = async () => {
+    try {
+      await signOut()
+      setUser(null)
+    } catch (error) {
+      console.error('Logout error:', error)
+    }
   }
 
   return (
