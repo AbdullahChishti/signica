@@ -1,12 +1,12 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Navigation } from "@/components/navigation"
+import Header from "@/components/Header"
 import { ExternalLink, Users, FileText, Home } from "lucide-react"
 
 export default function DemoPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100">
-      <Navigation />
+      <Header />
 
       <main className="container mx-auto px-6 py-12 lg:px-8">
         {/* Page Header */}

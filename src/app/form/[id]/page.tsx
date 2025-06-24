@@ -13,6 +13,7 @@ import { Shield } from "lucide-react"
 import Link from "next/link"
 import { getW9RequestById, submitW9FormData } from "@/lib/database"
 import type { W9Request } from "@/lib/supabase"
+import Header from "@/components/Header"
 
 export default function W9FormCompletion({ params }: { params: Promise<{ id: string }> }) {
   const [formData, setFormData] = useState({
@@ -157,36 +158,7 @@ export default function W9FormCompletion({ params }: { params: Promise<{ id: str
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100">
-      {/* Modern Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center space-x-8">
-              <Link href="/" className="flex items-center space-x-3">
-                <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                  <Shield className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-xl font-bold text-foreground">Signica</span>
-              </Link>
-
-              {/* Navigation */}
-              <nav className="hidden md:flex items-center">
-                <div className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-primary bg-primary/10 border border-primary/20">
-                  <Shield className="w-4 h-4 mr-2" />
-                  W-9 Form Completion
-                </div>
-              </nav>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <div className="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
-                <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                Secure Connection
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
       <main className="container mx-auto px-6 py-12 lg:px-8">

@@ -1,28 +1,12 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { CheckCircle, ArrowLeft, Shield, Send, Bell, Download } from "lucide-react"
+import Header from "@/components/Header"
 
 export default function RequestSuccessPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100">
-      {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <Link href="/" className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                <Send className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-bold text-foreground">Signica</span>
-            </Link>
-
-            <div className="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
-              <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-              Request Sent
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
       <main className="flex flex-1 items-center justify-center px-6 py-12 md:px-8 lg:py-20">
