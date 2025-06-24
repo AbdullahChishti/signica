@@ -91,13 +91,13 @@ export default function AdminDashboard() {
               {/* Navigation */}
               <nav className="hidden md:flex items-center space-x-1">
                 <Link href="/admin" className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-primary bg-primary/10 border border-primary/20">
-                  Dashboard
+                  Admin Dashboard
                 </Link>
                 <Link href="/admin/request" className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors">
                   New Request
                 </Link>
-                <Link href="/form/demo" className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors">
-                  Preview Form
+                <Link href="/candidate" className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors">
+                  Candidate View
                 </Link>
               </nav>
             </div>

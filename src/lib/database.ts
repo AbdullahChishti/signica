@@ -243,3 +243,28 @@ export async function getW9RequestStats(userId: string) {
     throw new DatabaseError('Failed to fetch W9 request statistics')
   }
 }
+
+// Candidate Operations
+export async function getW9RequestsByEmail(email: string): Promise<W9Request[]> {
+  try {
+    const { data, error } = await supabase
+      .from(TABLES.W9_REQUESTS)
+      .select(`
+        *,
+        w9_form_data (*)
+      `)
+      .eq('vendor_email', email)
+      .order('created_at', { ascending: false })
+
+    if (error) {
+      throw new DatabaseError(error.message)
+    }
+
+    return data || []
+  } catch (error) {
+    if (error instanceof DatabaseError) {
+      throw error
+    }
+    throw new DatabaseError('Failed to fetch W9 requests by email')
+  }
+}
