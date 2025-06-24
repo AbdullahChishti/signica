@@ -87,3 +87,8 @@ html {
 .shadow-large {
   box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.15), 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 }
+
+/* Custom max-width for better space utilization */
+.max-w-8xl {
+  max-width: 88rem; /* 1408px */
+}

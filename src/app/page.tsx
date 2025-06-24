@@ -9,20 +9,20 @@ export default function FormW9Landing() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-background to-muted/30 px-6 py-20 md:px-10 md:py-32 lg:py-40">
-          <div className="container mx-auto max-w-7xl">
-            <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+        <section className="bg-gradient-to-br from-background to-muted/30 px-4 py-16 md:px-6 md:py-24 lg:py-32">
+          <div className="container mx-auto max-w-none">
+            <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16 xl:gap-20 max-w-8xl mx-auto">
               <div className="flex flex-col gap-8 text-center lg:text-left order-2 lg:order-1">
                 <div className="flex flex-col gap-6">
                   <div className="inline-flex items-center rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary self-center lg:self-start">
                     <Shield className="w-4 h-4 mr-2" />
                     IRS Compliant & Secure
                   </div>
-                  <h1 className="text-4xl font-black leading-tight tracking-tighter text-foreground md:text-5xl lg:text-6xl xl:text-7xl">
+                  <h1 className="text-3xl font-bold leading-tight tracking-tight text-foreground md:text-4xl lg:text-5xl">
                     Simplify Your<br />
                     <span className="text-primary">Form W9</span> Process
                   </h1>
-                  <p className="text-xl font-normal leading-relaxed text-muted-foreground max-w-2xl">
+                  <p className="text-lg font-normal leading-relaxed text-muted-foreground max-w-xl lg:max-w-2xl">
                     Streamline W-9 collection and management with our secure, user-friendly platform.
                     Save time, reduce errors, and stay compliant.
                   </p>
@@ -35,7 +35,7 @@ export default function FormW9Landing() {
                     View Demo
                   </Link>
                 </div>
-                <div className="flex items-center gap-6 text-sm text-muted-foreground self-center lg:self-start">
+                <div className="flex flex-wrap items-center gap-4 lg:gap-6 text-sm text-muted-foreground self-center lg:self-start">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                     <span>No setup fees</span>
@@ -68,25 +68,25 @@ export default function FormW9Landing() {
         </section>
 
         {/* Features Section */}
-        <section className="bg-muted/30 px-6 py-20 md:px-10 md:py-32" id="features">
-          <div className="container mx-auto max-w-7xl">
-            <div className="flex flex-col gap-12 text-center md:gap-16">
+        <section className="bg-muted/30 px-4 py-16 md:px-6 md:py-24" id="features">
+          <div className="container mx-auto max-w-none">
+            <div className="flex flex-col gap-10 text-center md:gap-12 max-w-8xl mx-auto">
               <div className="flex flex-col gap-6">
                 <div className="inline-flex items-center rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary self-center">
                   <BarChart3 className="w-4 h-4 mr-2" />
                   Powerful Features
                 </div>
-                <h2 className="text-3xl font-bold leading-tight tracking-tight text-foreground md:text-4xl lg:text-5xl">
+                <h2 className="text-2xl font-bold leading-tight tracking-tight text-foreground md:text-3xl lg:text-4xl">
                   Everything you need to manage<br />
                   <span className="text-primary">W-9 forms efficiently</span>
                 </h2>
-                <p className="mx-auto max-w-3xl text-xl font-normal leading-relaxed text-muted-foreground">
+                <p className="mx-auto max-w-2xl text-lg font-normal leading-relaxed text-muted-foreground lg:max-w-3xl">
                   From secure collection to automated reporting, our platform handles every aspect of W-9 management
                   so you can focus on growing your business.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-8">
                 <div className="group flex flex-col gap-6 rounded-2xl border bg-card p-8 text-left shadow-sm transition-all hover:shadow-lg hover:border-primary/20">
                   <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-all">
                     <Shield className="h-7 w-7" />
@@ -128,11 +128,11 @@ export default function FormW9Landing() {
         </section>
 
         {/* CTA Section - Full Width */}
-        <section className="bg-primary py-16 md:py-24">
-          <div className="container mx-auto max-w-6xl px-6 md:px-10">
-            <div className="flex flex-col items-center gap-6 text-center md:gap-8">
+        <section className="bg-primary py-16 md:py-20">
+          <div className="container mx-auto max-w-none px-4 md:px-6">
+            <div className="flex flex-col items-center gap-6 text-center md:gap-8 max-w-4xl mx-auto">
               <div className="flex flex-col gap-4">
-                <h2 className="text-3xl font-bold leading-tight tracking-tight text-white md:text-4xl lg:text-5xl">
+                <h2 className="text-2xl font-bold leading-tight tracking-tight text-white md:text-3xl lg:text-4xl">
                   Ready to get started?
                 </h2>
                 <p className="text-lg font-normal leading-relaxed text-white/90 max-w-2xl mx-auto">
@@ -157,8 +157,9 @@ export default function FormW9Landing() {
 
       {/* Footer */}
       <footer className="border-t bg-muted/20 py-12">
-        <div className="container mx-auto px-6 md:px-10 max-w-7xl">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div className="container mx-auto px-4 md:px-6 max-w-none">
+            <div className="max-w-8xl mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             {/* Brand */}
             <div className="flex flex-col gap-4">
               <div className="flex items-center space-x-2">
@@ -237,6 +238,7 @@ export default function FormW9Landing() {
             </p>
             <div className="flex items-center gap-4">
               <span className="text-xs text-muted-foreground">Made with ❤️ for businesses</span>
+              </div>
             </div>
           </div>
         </div>
