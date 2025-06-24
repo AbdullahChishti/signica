@@ -1,11 +1,13 @@
+"use client"
+
 import { Sparkles } from "lucide-react"
 import Header from "@/components/Header"
-import { 
-  Loader, 
-  PageLoader, 
-  CardLoader, 
-  ButtonLoader, 
-  InlineLoader 
+import {
+  Loader,
+  PageLoader,
+  CardLoader,
+  ButtonLoader,
+  InlineLoader
 } from "@/components/ui/loader"
 import { Button } from "@/components/ui/button"
 

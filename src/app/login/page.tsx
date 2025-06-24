@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { ArrowRight, Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
@@ -8,7 +8,7 @@ import Header from "@/components/Header"
 import { useAuth } from "@/contexts/AuthContext"
 import { PageLoader, ButtonLoader } from "@/components/ui/loader"
 
-export default function LoginPage() {
+function LoginForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -195,5 +195,13 @@ export default function LoginPage() {
         </div>
       </main>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<PageLoader text="Loading login page..." />}>
+      <LoginForm />
+    </Suspense>
   )
 }
