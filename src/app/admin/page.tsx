@@ -45,15 +45,21 @@ export default function AdminDashboard() {
       setStats(statsData)
     } catch (error: any) {
       console.error('Error loading data:', error)
-      setError('Failed to load data')
+      setError('Failed to load data. Please try again.')
     } finally {
       setLoading(false)
     }
   }
 
-  const handleLogout = () => {
-    logout()
-    router.push('/')
+  const handleLogout = async () => {
+    try {
+      await logout()
+      // The logout function in AuthContext already handles the redirect
+    } catch (error) {
+      console.error('Logout error:', error)
+      // Fallback: force redirect to home
+      router.push('/')
+    }
   }
 
   // Auth guard handles this
@@ -91,20 +97,15 @@ export default function AdminDashboard() {
                 <Link href="/admin/request" className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors">
                   New Request
                 </Link>
-                {user?.role.isCandidate && (
-                  <Link href="/candidate" className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors">
-                    Candidate View
-                  </Link>
-                )}
               </nav>
             </div>
 
             <div className="flex items-center space-x-4">
               <div className="hidden sm:flex items-center space-x-3">
                 <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                  <span className="text-sm font-semibold text-primary">{user.name.charAt(0)}</span>
+                  <span className="text-sm font-semibold text-primary">{user?.name?.charAt(0) || 'U'}</span>
                 </div>
-                <span className="text-sm font-medium text-foreground">Welcome, {user.name}</span>
+                <span className="text-sm font-medium text-foreground">Welcome, {user?.name || 'User'}</span>
               </div>
               <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground" onClick={handleLogout}>
                 <LogOut className="w-4 h-4 mr-2" />
@@ -247,7 +248,7 @@ export default function AdminDashboard() {
                       </TableCell>
                       <TableCell className="px-6 py-4">
                         <Badge
-                          variant={request.status === "completed" ? "success" : request.status === "pending" ? "warning" : "destructive"}
+                          variant={request.status === "completed" ? "success" : request.status === "pending" ? "warning" : "secondary"}
                           className="font-medium capitalize"
                         >
                           {request.status}

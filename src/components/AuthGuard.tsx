@@ -7,48 +7,41 @@ import { useAuth } from '@/contexts/AuthContext'
 interface AuthGuardProps {
   children: React.ReactNode
   requireAuth?: boolean
-  requireRole?: 'admin' | 'candidate' | 'both'
-  redirectTo?: string
 }
 
 export default function AuthGuard({ 
   children, 
-  requireAuth = true, 
-  requireRole,
-  redirectTo 
+  requireAuth = true
 }: AuthGuardProps) {
   const { user, isLoading, isInitialized } = useAuth()
   const router = useRouter()
 
+  console.log(`🛡️  AUTH_GUARD: Render - requireAuth: ${requireAuth}, user: ${user?.email || 'null'}, loading: ${isLoading}, initialized: ${isInitialized}`)
+
   useEffect(() => {
+    console.log(`🔍 AUTH_GUARD: Effect - initialized: ${isInitialized}, loading: ${isLoading}`)
+    
     // Don't redirect until auth is initialized
-    if (!isInitialized) return
+    if (!isInitialized || isLoading) return
 
-    // If auth is required but user is not logged in
+    // If auth is required but user is not logged in, redirect to login
     if (requireAuth && !user) {
-      router.push(redirectTo || '/login')
+      console.log(`🔄 AUTH_GUARD: Auth required but no user, redirecting to login`)
+      router.push('/login')
       return
     }
 
-    // If user is logged in but shouldn't be (e.g., on login page)
+    // If auth is not required but user is logged in, redirect to admin
     if (!requireAuth && user) {
-      router.push(user.defaultDashboard)
+      console.log(`🔄 AUTH_GUARD: User logged in on auth page, redirecting to admin`)
+      router.push('/admin')
       return
     }
-
-    // If specific role is required
-    if (requireRole && user) {
-      const hasRequiredRole = checkUserRole(user, requireRole)
-      if (!hasRequiredRole) {
-        // Redirect to appropriate dashboard or show unauthorized
-        router.push('/unauthorized')
-        return
-      }
-    }
-  }, [user, isInitialized, requireAuth, requireRole, redirectTo, router])
+  }, [user, isInitialized, isLoading, requireAuth, router])
 
   // Show loading while auth is being initialized
   if (!isInitialized || isLoading) {
+    console.log(`⏳ AUTH_GUARD: Showing loading - initialized: ${isInitialized}, loading: ${isLoading}`)
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100 flex items-center justify-center">
         <div className="text-center">
@@ -59,65 +52,50 @@ export default function AuthGuard({
     )
   }
 
-  // If auth is required but user is not logged in, don't render children
+  // If auth is required but user is not logged in, show loading (redirect will happen)
   if (requireAuth && !user) {
-    return null
+    console.log(`🔐 AUTH_GUARD: Auth required but no user, showing redirect loading`)
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Redirecting to login...</p>
+        </div>
+      </div>
+    )
   }
 
-  // If user is logged in but shouldn't be (e.g., on login page), don't render children
+  // If auth is not required but user is logged in, show loading (redirect will happen)
   if (!requireAuth && user) {
-    return null
+    console.log(`🔄 AUTH_GUARD: User logged in on auth page, showing redirect loading`)
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Redirecting...</p>
+        </div>
+      </div>
+    )
   }
 
-  // If specific role is required and user doesn't have it, don't render children
-  if (requireRole && user && !checkUserRole(user, requireRole)) {
-    return null
-  }
-
+  console.log(`✅ AUTH_GUARD: All checks passed, rendering children`)
   return <>{children}</>
 }
 
-function checkUserRole(user: any, requiredRole: 'admin' | 'candidate' | 'both'): boolean {
-  switch (requiredRole) {
-    case 'admin':
-      return user.role.isAdmin
-    case 'candidate':
-      return user.role.isCandidate
-    case 'both':
-      return user.role.isAdmin && user.role.isCandidate
-    default:
-      return false
-  }
-}
-
 // Convenience components for specific use cases
-export function RequireAuth({ children, redirectTo }: { children: React.ReactNode; redirectTo?: string }) {
+export function RequireAuth({ children }: { children: React.ReactNode }) {
+  console.log(`🛡️  REQUIRE_AUTH: Rendering`)
   return (
-    <AuthGuard requireAuth={true} redirectTo={redirectTo}>
+    <AuthGuard requireAuth={true}>
       {children}
     </AuthGuard>
   )
 }
 
 export function RequireNoAuth({ children }: { children: React.ReactNode }) {
+  console.log(`🚫 REQUIRE_NO_AUTH: Rendering`)
   return (
     <AuthGuard requireAuth={false}>
-      {children}
-    </AuthGuard>
-  )
-}
-
-export function RequireAdmin({ children }: { children: React.ReactNode }) {
-  return (
-    <AuthGuard requireAuth={true} requireRole="admin">
-      {children}
-    </AuthGuard>
-  )
-}
-
-export function RequireCandidate({ children }: { children: React.ReactNode }) {
-  return (
-    <AuthGuard requireAuth={true} requireRole="candidate">
       {children}
     </AuthGuard>
   )

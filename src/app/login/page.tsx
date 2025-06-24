@@ -6,7 +6,6 @@ import { Shield } from "lucide-react"
 import Link from "next/link"
 import Header from "@/components/Header"
 import { useAuth } from "@/contexts/AuthContext"
-import { RequireNoAuth } from "@/components/AuthGuard"
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -14,22 +13,43 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { login, user } = useAuth()
+  const { login, user, isLoading, isInitialized } = useAuth()
   const router = useRouter()
   const searchParams = useSearchParams()
+
+  console.log(`🔍 LOGIN_PAGE: Render - user: ${user?.email || 'null'}, loading: ${isLoading}, initialized: ${isInitialized}, submitting: ${isSubmitting}`)
 
   // Check for success message from signup
   useEffect(() => {
     const message = searchParams.get('message')
     if (message) {
-      setSuccessMessage(message)
+      setSuccessMessage(decodeURIComponent(message))
     }
   }, [searchParams])
 
-  // This will be handled by RequireNoAuth component
+  // Handle redirect when user is authenticated
+  useEffect(() => {
+    if (isInitialized && user) {
+      const redirectTo = searchParams.get('redirect')
+      console.log(`🎯 LOGIN_PAGE: User authenticated, redirecting to: ${redirectTo || '/admin'}`)
+      
+      // Reset submitting state
+      setIsSubmitting(false)
+      
+      // Small delay to ensure state updates, then redirect
+      setTimeout(() => {
+        if (redirectTo && redirectTo !== '/login' && redirectTo !== '/signup') {
+          window.location.href = redirectTo
+        } else {
+          window.location.href = '/admin'
+        }
+      }, 100)
+    }
+  }, [user, isInitialized, searchParams])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    console.log(`📝 LOGIN_PAGE: Form submitted for ${email}`)
     setError('')
 
     if (!email || !password) {
@@ -37,21 +57,57 @@ export default function LoginPage() {
       return
     }
 
-    setIsSubmitting(true)
-
-    const result = await login(email, password)
-
-    if (result.success) {
-      // AuthGuard will handle the redirect
-    } else {
-      setError(result.error || 'Invalid email or password')
+    if (!email.includes('@')) {
+      setError('Please enter a valid email address')
+      return
     }
 
-    setIsSubmitting(false)
+    setIsSubmitting(true)
+
+    try {
+      const result = await login(email, password)
+
+      if (result.success) {
+        console.log(`✅ LOGIN_PAGE: Login successful`)
+        // Don't set isSubmitting to false - let the redirect happen
+      } else {
+        console.error(`❌ LOGIN_PAGE: Login failed - ${result.error}`)
+        setError(result.error || 'Invalid email or password')
+        setIsSubmitting(false)
+      }
+    } catch (error) {
+      console.error('❌ LOGIN_PAGE: Login error:', error)
+      setError('An unexpected error occurred. Please try again.')
+      setIsSubmitting(false)
+    }
   }
+
+  // Show loading while auth is initializing
+  if (!isInitialized) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // If user is already authenticated, show redirecting message
+  if (user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Redirecting...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <RequireNoAuth>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100">
       <Header />
 
       {/* Main Content */}
@@ -77,7 +133,6 @@ export default function LoginPage() {
                 <p className="mt-3 text-lg text-muted-foreground">
                   Sign in to your Signica account
                 </p>
-
               </div>
 
               {/* Success Message */}
@@ -109,6 +164,7 @@ export default function LoginPage() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -130,6 +186,7 @@ export default function LoginPage() {
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -139,6 +196,7 @@ export default function LoginPage() {
                     name="remember-me"
                     type="checkbox"
                     className="h-4 w-4 rounded border-input text-primary focus:ring-primary focus:ring-offset-2"
+                    disabled={isSubmitting}
                   />
                   <label htmlFor="remember-me" className="text-sm text-muted-foreground">
                     Remember me for 30 days
@@ -199,7 +257,6 @@ export default function LoginPage() {
           </div>
         </div>
       </main>
-      </div>
-    </RequireNoAuth>
+    </div>
   )
 }

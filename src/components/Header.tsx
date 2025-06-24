@@ -8,7 +8,14 @@ export default function Header() {
   const isAuthPage = pathname === '/login' || pathname === '/signup';
   const isSettingsPage = pathname === '/settings';
 
-  const navLinks = [];
+    const isHomePage = pathname === '/';
+
+  const navLinks = isHomePage
+    ? [
+        { name: 'Features', href: '#features' },
+        { name: 'How It Works', href: '#how-it-works' },
+      ]
+    : [];
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

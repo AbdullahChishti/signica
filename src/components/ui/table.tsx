@@ -5,6 +5,10 @@ interface TableProps {
   className?: string
 }
 
+interface TableCellProps extends TableProps {
+  colSpan?: number
+}
+
 export function Table({ children, className = '' }: TableProps) {
   return (
     <table className={`w-full ${className}`}>
@@ -45,9 +49,9 @@ export function TableHead({ children, className = '' }: TableProps) {
   )
 }
 
-export function TableCell({ children, className = '' }: TableProps) {
+export function TableCell({ children, className = '', colSpan }: TableCellProps) {
   return (
-    <td className={`px-6 py-4 ${className}`}>
+    <td className={`px-6 py-4 ${className}`} colSpan={colSpan}>
       {children}
     </td>
   )

@@ -11,7 +11,7 @@ export default function UnauthorizedPage() {
 
   const handleGoBack = () => {
     if (user) {
-      router.push(user.defaultDashboard)
+      router.push('/admin')
     } else {
       router.push('/')
     }
@@ -56,9 +56,6 @@ export default function UnauthorizedPage() {
             <div className="mt-8 pt-6 border-t border-border">
               <p className="text-sm text-muted-foreground">
                 Signed in as: <span className="font-medium">{user.email}</span>
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                Role: {user.role.primaryRole}
               </p>
             </div>
           )}
