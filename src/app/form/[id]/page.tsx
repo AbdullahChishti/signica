@@ -32,23 +32,23 @@ export default function W9FormCompletion({ params }: { params: { id: string } })
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [signatureType, setSignatureType] = useState<'typed' | 'drawn'>('typed')
-  const [isMagicLinkAccess, setIsMagicLinkAccess] = useState(false)
+  const [isDirectAccess, setIsDirectAccess] = useState(false)
   const router = useRouter()
 
-  // Check for magic link access and load W9 request data
+  // Check for direct access and load W9 request data
   useEffect(() => {
-    checkMagicLinkAndLoadRequest()
+    checkDirectAccessAndLoadRequest()
   }, [params.id])
 
-  const checkMagicLinkAndLoadRequest = async () => {
+  const checkDirectAccessAndLoadRequest = async () => {
     try {
       setLoading(true)
       setError('')
 
-      // Check if this is magic link access
+      // Check if this is direct access (no authentication required)
       const urlParams = new URLSearchParams(window.location.search)
-      const isMagicLink = urlParams.get('magic_link') === 'true'
-      setIsMagicLinkAccess(isMagicLink)
+      const isDirect = urlParams.get('direct') === 'true'
+      setIsDirectAccess(isDirect)
 
       const requestData = await getW9RequestById(params.id)
 
@@ -62,8 +62,12 @@ export default function W9FormCompletion({ params }: { params: { id: string } })
         return
       }
 
-      // For magic link access, we don't need additional authentication
-      // The magic link already provides temporary authenticated session
+      if (requestData.status === 'expired') {
+        setError('This W-9 request has expired')
+        return
+      }
+
+      // For direct access, no authentication needed - just validate the request exists
       setRequest(requestData)
     } catch (error: any) {
       console.error('Error loading request:', error)

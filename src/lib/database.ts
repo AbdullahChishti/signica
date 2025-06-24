@@ -269,32 +269,15 @@ export async function getW9RequestsByEmail(email: string): Promise<W9Request[]> 
   }
 }
 
-// Magic Link Operations
-export async function generateMagicLinkForW9Request(requestId: string, vendorEmail: string): Promise<string> {
+// Direct Form Access (No Authentication Required)
+export async function generateDirectFormLink(requestId: string): Promise<string> {
   try {
-    // Generate magic link that will authenticate the vendor and redirect to the form
-    const { data, error } = await supabase.auth.signInWithOtp({
-      email: vendorEmail,
-      options: {
-        shouldCreateUser: false, // Don't create permanent user accounts
-        data: {
-          request_id: requestId,
-          purpose: 'w9_form_completion'
-        }
-      }
-    })
+    // Generate direct form link - no authentication required
+    // The form will validate the request exists and is still pending
+    const directLink = `${process.env.NEXT_PUBLIC_SITE_URL}/form/${requestId}?direct=true`
 
-    if (error) {
-      throw new DatabaseError(`Failed to generate magic link: ${error.message}`)
-    }
-
-    // Return the magic link URL that will be sent via email
-    // Note: In production, you'd customize the redirect URL
-    return `${process.env.NEXT_PUBLIC_SITE_URL}/form/${requestId}?magic_link=true`
+    return directLink
   } catch (error) {
-    if (error instanceof DatabaseError) {
-      throw error
-    }
-    throw new DatabaseError('Failed to generate magic link')
+    throw new DatabaseError('Failed to generate form link')
   }
 }

@@ -47,7 +47,7 @@ export default function RequestSuccessPage() {
                   W-9 Request Sent Successfully!
                 </h1>
                 <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-                  Your W-9 request has been sent to the vendor. They will receive an email with a secure magic link to complete their form directly - no account creation required.
+                  Your W-9 request has been sent to the vendor. They will receive an email with a secure direct link to complete their form - no account creation required.
                 </p>
               </div>
 
@@ -60,8 +60,8 @@ export default function RequestSuccessPage() {
                       <span className="text-sm font-bold text-primary">1</span>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground mb-1">Magic Link Delivered</h3>
-                      <p className="text-sm text-muted-foreground">The vendor receives a secure magic link that provides instant access to their W-9 form</p>
+                      <h3 className="font-semibold text-foreground mb-1">Direct Link Delivered</h3>
+                      <p className="text-sm text-muted-foreground">The vendor receives a secure direct link that provides instant access to their W-9 form</p>
                     </div>
                   </div>
 
@@ -71,7 +71,7 @@ export default function RequestSuccessPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-foreground mb-1">One-Click Access</h3>
-                      <p className="text-sm text-muted-foreground">They click the magic link and complete the W-9 form instantly - no signup required</p>
+                      <p className="text-sm text-muted-foreground">They click the direct link and complete the W-9 form instantly - no signup required</p>
                     </div>
                   </div>
 

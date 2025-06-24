@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Send } from "lucide-react"
 import Link from "next/link"
 import { useAuth } from "@/contexts/AuthContext"
-import { createW9Request, generateMagicLinkForW9Request } from "@/lib/database"
+import { createW9Request, generateDirectFormLink } from "@/lib/database"
 
 export default function RequestW9Form() {
   const [vendorName, setVendorName] = useState('')
@@ -39,12 +39,12 @@ export default function RequestW9Form() {
 
       console.log('W9 request created:', request)
 
-      // Generate magic link for the vendor
-      const magicLink = await generateMagicLinkForW9Request(request.id, vendorEmail)
+      // Generate direct form link for the vendor
+      const formLink = await generateDirectFormLink(request.id)
 
-      console.log('Magic link generated:', magicLink)
+      console.log('Direct form link generated:', formLink)
 
-      // TODO: Send email with magic link to vendor
+      // TODO: Send email with direct form link to vendor
       // For now, we'll just show the link in console and redirect to success
 
       // Redirect to success page
