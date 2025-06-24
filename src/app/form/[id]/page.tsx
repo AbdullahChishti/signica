@@ -8,8 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Shield } from "lucide-react"
+import { Shield, User, CreditCard, MapPin, PenTool, Sparkles, CheckCircle, Lock } from "lucide-react"
 import Link from "next/link"
 import { getW9RequestById, submitW9FormData } from "@/lib/database"
 import type { W9Request } from "@/lib/supabase"
@@ -137,15 +136,26 @@ export default function W9FormCompletion({ params }: { params: Promise<{ id: str
 
   if (error && !request) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100 flex items-center justify-center">
-        <div className="text-center max-w-md mx-auto p-8">
-          <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center">
+        <div 
+          className="bg-white/90 backdrop-blur-sm border border-red-200/60 rounded-3xl p-12 text-center max-w-md mx-auto"
+          style={{
+            boxShadow: `
+              0 25px 50px -12px rgba(239, 68, 68, 0.25),
+              0 10px 20px -8px rgba(239, 68, 68, 0.15),
+              0 4px 15px -3px rgba(239, 68, 68, 0.1)
+            `
+          }}
+        >
+          <div className="w-16 h-16 rounded-3xl bg-red-100 flex items-center justify-center mx-auto mb-6">
             <Shield className="w-8 h-8 text-red-600" />
           </div>
-          <h1 className="text-2xl font-bold text-foreground mb-2">Unable to Load Form</h1>
-          <p className="text-muted-foreground mb-6">{error}</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-3">Unable to Load Form</h1>
+          <p className="text-gray-600/90 mb-8 font-medium">{error}</p>
           <Link href="/">
-            <Button>Return to Home</Button>
+            <Button className="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white font-semibold px-8 py-3 rounded-2xl">
+              Return to Home
+            </Button>
           </Link>
         </div>
       </div>
@@ -153,201 +163,288 @@ export default function W9FormCompletion({ params }: { params: Promise<{ id: str
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
       <Header />
 
       {/* Main Content */}
       <main className="container mx-auto px-6 py-12 lg:px-8">
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-4xl mx-auto">
+          
           {/* Page Header */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary mb-6">
-              <Shield className="w-4 h-4 mr-2" />
-              IRS Form W-9
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 to-blue-600/10 border border-primary/20 mb-6">
+              <Sparkles className="w-4 h-4 text-primary" />
+              <span className="text-sm font-medium text-primary">IRS Form W-9</span>
             </div>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl mb-4">
-              Complete your W-9 Information
+
+            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+              Complete Your
+              <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent block">
+                W-9 Information
+              </span>
             </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Please provide your tax information for <span className="font-semibold text-foreground">{request?.vendor_name || 'the requesting company'}</span>.
-              All information is encrypted and securely stored.
+            
+            <p className="text-xl text-gray-600/90 mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
+              Secure tax form for <span className="text-gray-700 font-semibold">{request?.vendor_name || 'the requesting company'}</span>. 
+              <span className="text-gray-700"> All information encrypted.</span>
             </p>
           </div>
 
           {/* Form Card */}
-          <div className="rounded-2xl border bg-card shadow-large overflow-hidden">
-            <div className="bg-primary/5 px-8 py-6 border-b border-border">
+          <div 
+            className="bg-white/90 backdrop-blur-sm border border-gray-200/60 rounded-3xl overflow-hidden relative"
+            style={{
+              boxShadow: `
+                0 25px 50px -12px rgba(0, 0, 0, 0.25),
+                0 10px 20px -8px rgba(0, 0, 0, 0.15),
+                0 4px 15px -3px rgba(0, 0, 0, 0.1)
+              `
+            }}
+          >
+            {/* Decorative Elements */}
+            <div className="absolute -top-6 -right-6 w-24 h-24 bg-gradient-to-r from-primary/20 to-blue-600/20 rounded-full blur-xl"></div>
+            <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-r from-green-400/10 to-emerald-400/10 rounded-full blur-2xl"></div>
+
+            {/* Header */}
+            <div 
+              className="px-8 py-6 border-b border-gray-200/60 bg-gradient-to-r from-gray-50/50 to-gray-100/50 relative"
+            >
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-xl font-semibold text-foreground">Tax Information Form</h2>
-                  <p className="text-sm text-muted-foreground mt-1">Complete all required fields below</p>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Tax Information Form</h2>
+                  <p className="text-gray-600/90 font-medium">Complete all required fields below</p>
                 </div>
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                  <Shield className="w-4 h-4" />
-                  <span>Secure & Encrypted</span>
+                <div 
+                  className="flex items-center space-x-3 px-4 py-2 rounded-2xl bg-green-100/80 border border-green-200/60"
+                  style={{
+                    boxShadow: `0 4px 12px -2px rgba(34, 197, 94, 0.1)`
+                  }}
+                >
+                  <Lock className="w-4 h-4 text-green-600" />
+                  <span className="text-sm font-semibold text-green-700">Secure & Encrypted</span>
                 </div>
               </div>
             </div>
 
-            <div className="p-8 md:p-12">
+            <div className="p-8 md:p-12 relative">
               {/* Error Message */}
               {error && (
-                <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200">
-                  <p className="text-sm text-red-600">{error}</p>
+                <div 
+                  className="mb-8 p-6 rounded-2xl bg-red-50/80 backdrop-blur-sm border border-red-200/60"
+                  style={{
+                    boxShadow: `
+                      0 10px 25px -5px rgba(239, 68, 68, 0.1),
+                      0 4px 10px -2px rgba(239, 68, 68, 0.05)
+                    `
+                  }}
+                >
+                  <p className="text-red-700 font-semibold">{error}</p>
                 </div>
               )}
 
-              <form className="space-y-8" onSubmit={handleSubmit}>
+              <form className="space-y-12" onSubmit={handleSubmit}>
+                
                 {/* Personal Information Section */}
-                <div className="space-y-6">
-                  <div className="flex items-center space-x-3 mb-6">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="text-sm font-bold text-primary">1</span>
+                <div 
+                  className="bg-white/60 backdrop-blur-sm border border-gray-200/40 rounded-3xl p-8"
+                  style={{
+                    boxShadow: `
+                      0 20px 40px -12px rgba(0, 0, 0, 0.1),
+                      0 8px 16px -6px rgba(0, 0, 0, 0.05)
+                    `
+                  }}
+                >
+                  <div className="flex items-center mb-8">
+                    <div 
+                      className="w-14 h-14 rounded-2xl bg-gradient-to-r from-primary/20 to-blue-600/20 flex items-center justify-center mr-4"
+                      style={{
+                        boxShadow: `0 6px 15px -3px rgba(99, 102, 241, 0.15)`
+                      }}
+                    >
+                      <User className="w-7 h-7 text-primary" />
                     </div>
-                    <h3 className="text-lg font-semibold text-foreground">Personal Information</h3>
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-900">Personal Information</h3>
+                      <p className="text-gray-600/90 font-medium">Your legal name and business details</p>
+                    </div>
                   </div>
 
-                  {/* Legal Name */}
-                  <div className="space-y-3">
-                    <Label htmlFor="legalName" className="text-base font-semibold text-foreground">
-                      Legal Name (First, Middle, Last)
-                    </Label>
-                    <Input
-                      id="legalName"
-                      type="text"
-                      placeholder="Enter your full legal name as it appears on your tax return"
-                      value={formData.legalName}
-                      onChange={(e) => handleInputChange("legalName", e.target.value)}
-                      className="w-full rounded-xl border border-input bg-background px-4 py-3 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
-                    />
-                    <p className="text-sm text-muted-foreground">Enter your name exactly as it appears on your tax return</p>
-                  </div>
+                  <div className="space-y-6">
+                    {/* Legal Name */}
+                    <div>
+                      <Label className="text-base font-semibold text-gray-900 mb-3 block">
+                        Legal Name (First, Middle, Last) *
+                      </Label>
+                      <Input
+                        type="text"
+                        placeholder="Enter your full legal name as it appears on tax return"
+                        value={formData.legalName}
+                        onChange={(e) => handleInputChange("legalName", e.target.value)}
+                        className="w-full rounded-2xl border-2 border-gray-200/60 bg-white/50 backdrop-blur-sm px-6 py-4 text-base font-medium placeholder:text-gray-400 focus:border-primary focus:bg-white transition-all duration-200 focus:shadow-lg"
+                      />
+                      <p className="text-sm text-gray-500/80 mt-2 font-medium">Must match your tax return exactly</p>
+                    </div>
 
-                  {/* Business Name */}
-                  <div className="space-y-3">
-                    <Label htmlFor="businessName" className="text-base font-semibold text-foreground">
-                      Business Name <span className="text-muted-foreground font-normal">(if different from above)</span>
-                    </Label>
-                    <Input
-                      id="businessName"
-                      type="text"
-                      placeholder="Enter your business name (optional)"
-                      value={formData.businessName}
-                      onChange={(e) => handleInputChange("businessName", e.target.value)}
-                      className="w-full rounded-xl border border-input bg-background px-4 py-3 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
-                    />
-                    <p className="text-sm text-muted-foreground">Only if your business name is different from your legal name</p>
+                    {/* Business Name */}
+                    <div>
+                      <Label className="text-base font-semibold text-gray-900 mb-3 block">
+                        Business Name <span className="text-gray-500 font-normal">(if different from above)</span>
+                      </Label>
+                      <Input
+                        type="text"
+                        placeholder="Enter business name (optional)"
+                        value={formData.businessName}
+                        onChange={(e) => handleInputChange("businessName", e.target.value)}
+                        className="w-full rounded-2xl border-2 border-gray-200/60 bg-white/50 backdrop-blur-sm px-6 py-4 text-base font-medium placeholder:text-gray-400 focus:border-primary focus:bg-white transition-all duration-200 focus:shadow-lg"
+                      />
+                      <p className="text-sm text-gray-500/80 mt-2 font-medium">Only if different from legal name</p>
+                    </div>
                   </div>
                 </div>
 
                 {/* Tax Information Section */}
-                <div className="space-y-6">
-                  <div className="flex items-center space-x-3 mb-6">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="text-sm font-bold text-primary">2</span>
+                <div 
+                  className="bg-white/60 backdrop-blur-sm border border-gray-200/40 rounded-3xl p-8"
+                  style={{
+                    boxShadow: `
+                      0 20px 40px -12px rgba(0, 0, 0, 0.1),
+                      0 8px 16px -6px rgba(0, 0, 0, 0.05)
+                    `
+                  }}
+                >
+                  <div className="flex items-center mb-8">
+                    <div 
+                      className="w-14 h-14 rounded-2xl bg-gradient-to-r from-purple-100 to-pink-100 flex items-center justify-center mr-4"
+                      style={{
+                        boxShadow: `0 6px 15px -3px rgba(168, 85, 247, 0.15)`
+                      }}
+                    >
+                      <CreditCard className="w-7 h-7 text-purple-600" />
                     </div>
-                    <h3 className="text-lg font-semibold text-foreground">Tax Classification</h3>
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-900">Tax Classification</h3>
+                      <p className="text-gray-600/90 font-medium">Federal tax filing information</p>
+                    </div>
                   </div>
 
-                  {/* Tax Classification */}
-                  <div className="space-y-3">
-                    <Label htmlFor="taxClassification" className="text-base font-semibold text-foreground">
-                      Federal Tax Classification
-                    </Label>
-                    <Select onValueChange={(value) => handleInputChange("taxClassification", value)}>
-                      <SelectTrigger className="w-full rounded-xl border border-input bg-background px-4 py-3 text-base ring-offset-background focus:ring-2 focus:ring-primary focus:ring-offset-2">
-                        <SelectValue placeholder="Select your tax classification" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="individual">Individual/Sole Proprietor</SelectItem>
-                        <SelectItem value="c-corp">C Corporation</SelectItem>
-                        <SelectItem value="s-corp">S Corporation</SelectItem>
-                        <SelectItem value="partnership">Partnership</SelectItem>
-                        <SelectItem value="llc">Limited Liability Company (LLC)</SelectItem>
-                        <SelectItem value="other">Other (please specify)</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <p className="text-sm text-muted-foreground">Select the classification that matches your tax filing status</p>
-                  </div>
+                  <div className="space-y-6">
+                    {/* Tax Classification */}
+                    <div>
+                      <Label className="text-base font-semibold text-gray-900 mb-3 block">
+                        Federal Tax Classification *
+                      </Label>
+                      <Select onValueChange={(value) => handleInputChange("taxClassification", value)}>
+                        <SelectTrigger className="w-full rounded-2xl border-2 border-gray-200/60 bg-white/50 backdrop-blur-sm px-6 py-4 text-base font-medium focus:border-primary focus:bg-white transition-all duration-200 focus:shadow-lg">
+                          <SelectValue placeholder="Select your tax classification" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="individual">Individual/Sole Proprietor</SelectItem>
+                          <SelectItem value="c-corp">C Corporation</SelectItem>
+                          <SelectItem value="s-corp">S Corporation</SelectItem>
+                          <SelectItem value="partnership">Partnership</SelectItem>
+                          <SelectItem value="llc">Limited Liability Company (LLC)</SelectItem>
+                          <SelectItem value="other">Other (please specify)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <p className="text-sm text-gray-500/80 mt-2 font-medium">Choose your business structure</p>
+                    </div>
 
-                  {/* SSN or EIN */}
-                  <div className="space-y-3">
-                    <Label htmlFor="ssnEin" className="text-base font-semibold text-foreground">
-                      Taxpayer Identification Number
-                    </Label>
-                    <Input
-                      id="ssnEin"
-                      type="text"
-                      placeholder="XXX-XX-XXXX (SSN) or XX-XXXXXXX (EIN)"
-                      value={formData.ssnEin}
-                      onChange={(e) => handleInputChange("ssnEin", e.target.value)}
-                      className="w-full rounded-xl border border-input bg-background px-4 py-3 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
-                    />
-                    <p className="text-sm text-muted-foreground">Enter your Social Security Number (SSN) or Employer Identification Number (EIN)</p>
+                    {/* SSN or EIN */}
+                    <div>
+                      <Label className="text-base font-semibold text-gray-900 mb-3 block">
+                        Taxpayer Identification Number *
+                      </Label>
+                      <Input
+                        type="text"
+                        placeholder="XXX-XX-XXXX (SSN) or XX-XXXXXXX (EIN)"
+                        value={formData.ssnEin}
+                        onChange={(e) => handleInputChange("ssnEin", e.target.value)}
+                        className="w-full rounded-2xl border-2 border-gray-200/60 bg-white/50 backdrop-blur-sm px-6 py-4 text-base font-medium placeholder:text-gray-400 focus:border-primary focus:bg-white transition-all duration-200 focus:shadow-lg"
+                      />
+                      <p className="text-sm text-gray-500/80 mt-2 font-medium">Social Security Number or Employer ID</p>
+                    </div>
                   </div>
                 </div>
 
                 {/* Address Section */}
-                <div className="space-y-6">
-                  <div className="flex items-center space-x-3 mb-6">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="text-sm font-bold text-primary">3</span>
+                <div 
+                  className="bg-white/60 backdrop-blur-sm border border-gray-200/40 rounded-3xl p-8"
+                  style={{
+                    boxShadow: `
+                      0 20px 40px -12px rgba(0, 0, 0, 0.1),
+                      0 8px 16px -6px rgba(0, 0, 0, 0.05)
+                    `
+                  }}
+                >
+                  <div className="flex items-center mb-8">
+                    <div 
+                      className="w-14 h-14 rounded-2xl bg-gradient-to-r from-green-100 to-emerald-100 flex items-center justify-center mr-4"
+                      style={{
+                        boxShadow: `0 6px 15px -3px rgba(34, 197, 94, 0.15)`
+                      }}
+                    >
+                      <MapPin className="w-7 h-7 text-green-600" />
                     </div>
-                    <h3 className="text-lg font-semibold text-foreground">Address Information</h3>
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-900">Address Information</h3>
+                      <p className="text-gray-600/90 font-medium">Your current mailing address</p>
+                    </div>
                   </div>
 
-                  <div className="space-y-4">
-                    <div className="space-y-3">
-                      <Label className="text-base font-semibold text-foreground">Street Address</Label>
+                  <div className="space-y-6">
+                    <div>
+                      <Label className="text-base font-semibold text-gray-900 mb-3 block">Street Address *</Label>
                       <Input
                         type="text"
                         placeholder="Enter your street address"
                         value={formData.streetAddress}
                         onChange={(e) => handleInputChange("streetAddress", e.target.value)}
-                        className="w-full rounded-xl border border-input bg-background px-4 py-3 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
+                        className="w-full rounded-2xl border-2 border-gray-200/60 bg-white/50 backdrop-blur-sm px-6 py-4 text-base font-medium placeholder:text-gray-400 focus:border-primary focus:bg-white transition-all duration-200 focus:shadow-lg"
                       />
                     </div>
 
-                    <div className="space-y-3">
-                      <Label className="text-base font-semibold text-foreground">Apartment, Suite, etc. <span className="text-muted-foreground font-normal">(optional)</span></Label>
+                    <div>
+                      <Label className="text-base font-semibold text-gray-900 mb-3 block">
+                        Apartment, Suite, etc. <span className="text-gray-500 font-normal">(optional)</span>
+                      </Label>
                       <Input
                         type="text"
                         placeholder="Apartment, suite, unit, etc."
                         value={formData.apartment}
                         onChange={(e) => handleInputChange("apartment", e.target.value)}
-                        className="w-full rounded-xl border border-input bg-background px-4 py-3 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
+                        className="w-full rounded-2xl border-2 border-gray-200/60 bg-white/50 backdrop-blur-sm px-6 py-4 text-base font-medium placeholder:text-gray-400 focus:border-primary focus:bg-white transition-all duration-200 focus:shadow-lg"
                       />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="space-y-2">
-                        <Label className="text-sm font-medium text-foreground">City</Label>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div>
+                        <Label className="text-sm font-semibold text-gray-900 mb-3 block">City *</Label>
                         <Input
                           type="text"
                           placeholder="City"
                           value={formData.city}
                           onChange={(e) => handleInputChange("city", e.target.value)}
-                          className="w-full rounded-xl border border-input bg-background px-4 py-3 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
+                          className="w-full rounded-2xl border-2 border-gray-200/60 bg-white/50 backdrop-blur-sm px-6 py-4 text-base font-medium placeholder:text-gray-400 focus:border-primary focus:bg-white transition-all duration-200 focus:shadow-lg"
                         />
                       </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-medium text-foreground">State</Label>
+                      <div>
+                        <Label className="text-sm font-semibold text-gray-900 mb-3 block">State *</Label>
                         <Input
                           type="text"
                           placeholder="State"
                           value={formData.state}
                           onChange={(e) => handleInputChange("state", e.target.value)}
-                          className="w-full rounded-xl border border-input bg-background px-4 py-3 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
+                          className="w-full rounded-2xl border-2 border-gray-200/60 bg-white/50 backdrop-blur-sm px-6 py-4 text-base font-medium placeholder:text-gray-400 focus:border-primary focus:bg-white transition-all duration-200 focus:shadow-lg"
                         />
                       </div>
-                      <div className="space-y-2">
-                        <Label className="text-sm font-medium text-foreground">ZIP Code</Label>
+                      <div>
+                        <Label className="text-sm font-semibold text-gray-900 mb-3 block">ZIP Code *</Label>
                         <Input
                           type="text"
                           placeholder="ZIP Code"
                           value={formData.zipCode}
                           onChange={(e) => handleInputChange("zipCode", e.target.value)}
-                          className="w-full rounded-xl border border-input bg-background px-4 py-3 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
+                          className="w-full rounded-2xl border-2 border-gray-200/60 bg-white/50 backdrop-blur-sm px-6 py-4 text-base font-medium placeholder:text-gray-400 focus:border-primary focus:bg-white transition-all duration-200 focus:shadow-lg"
                         />
                       </div>
                     </div>
@@ -355,37 +452,53 @@ export default function W9FormCompletion({ params }: { params: Promise<{ id: str
                 </div>
 
                 {/* Signature Section */}
-                <div className="space-y-6">
-                  <div className="flex items-center space-x-3 mb-6">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="text-sm font-bold text-primary">4</span>
+                <div 
+                  className="bg-white/60 backdrop-blur-sm border border-gray-200/40 rounded-3xl p-8"
+                  style={{
+                    boxShadow: `
+                      0 20px 40px -12px rgba(0, 0, 0, 0.1),
+                      0 8px 16px -6px rgba(0, 0, 0, 0.05)
+                    `
+                  }}
+                >
+                  <div className="flex items-center mb-8">
+                    <div 
+                      className="w-14 h-14 rounded-2xl bg-gradient-to-r from-amber-100 to-yellow-100 flex items-center justify-center mr-4"
+                      style={{
+                        boxShadow: `0 6px 15px -3px rgba(245, 158, 11, 0.15)`
+                      }}
+                    >
+                      <PenTool className="w-7 h-7 text-amber-600" />
                     </div>
-                    <h3 className="text-lg font-semibold text-foreground">Electronic Signature</h3>
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-900">Electronic Signature</h3>
+                      <p className="text-gray-600/90 font-medium">Digital signature for form completion</p>
+                    </div>
                   </div>
 
-                  <div className="space-y-4">
-                    <Label className="text-base font-semibold text-foreground">Digital Signature</Label>
+                  <div className="space-y-6">
+                    <Label className="text-base font-semibold text-gray-900 block">Digital Signature *</Label>
 
-                    <Tabs defaultValue="type" className="w-full" onValueChange={(value) => setSignatureType(value as 'typed' | 'drawn')}>
-                      <TabsList className="grid w-full grid-cols-2 rounded-xl">
-                        <TabsTrigger value="type" className="rounded-lg">Type Signature</TabsTrigger>
-                        <TabsTrigger value="draw" className="rounded-lg">Draw Signature</TabsTrigger>
+                    <Tabs defaultValue="type" className="w-full">
+                      <TabsList className="grid w-full grid-cols-2 rounded-2xl p-1 bg-gray-100/80 backdrop-blur-sm">
+                        <TabsTrigger value="type" className="rounded-xl font-semibold">Type Signature</TabsTrigger>
+                        <TabsTrigger value="draw" className="rounded-xl font-semibold">Draw Signature</TabsTrigger>
                       </TabsList>
-                      <TabsContent value="type" className="space-y-3 mt-4">
+                      <TabsContent value="type" className="space-y-4 mt-6">
                         <Textarea
                           placeholder="Type your full legal name as your electronic signature"
                           value={formData.signature}
                           onChange={(e) => handleInputChange("signature", e.target.value)}
-                          className="w-full h-32 resize-none rounded-xl border border-input bg-background px-4 py-3 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
+                          className="w-full h-32 resize-none rounded-2xl border-2 border-gray-200/60 bg-white/50 backdrop-blur-sm px-6 py-4 text-base font-medium placeholder:text-gray-400 focus:border-primary focus:bg-white transition-all duration-200 focus:shadow-lg"
                           required
                         />
-                        <p className="text-sm text-muted-foreground">Type your full legal name. This serves as your electronic signature.</p>
+                        <p className="text-sm text-gray-500/80 font-medium">Type your full legal name. This serves as your electronic signature.</p>
                       </TabsContent>
-                      <TabsContent value="draw" className="space-y-3 mt-4">
-                        <div className="w-full h-32 border-2 border-dashed border-muted-foreground/30 rounded-xl flex items-center justify-center text-muted-foreground bg-muted/20">
+                      <TabsContent value="draw" className="space-y-4 mt-6">
+                        <div className="w-full h-32 border-2 border-dashed border-gray-300 rounded-2xl flex items-center justify-center bg-gray-50/50 backdrop-blur-sm">
                           <div className="text-center">
-                            <Shield className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                            <span className="text-sm">Drawing signature feature coming soon</span>
+                            <PenTool className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+                            <span className="text-sm text-gray-500 font-medium">Drawing signature feature coming soon</span>
                           </div>
                         </div>
                       </TabsContent>
@@ -394,11 +507,12 @@ export default function W9FormCompletion({ params }: { params: Promise<{ id: str
                 </div>
 
                 {/* Submit Button */}
-                <div className="pt-8">
+                <div className="pt-8 text-center">
                   <Button
                     type="submit"
                     disabled={submitting}
-                    className="inline-flex items-center justify-center rounded-xl text-base font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-xl h-14 px-8 w-full"
+                    size="lg"
+                    className="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white font-semibold px-12 py-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 text-lg group"
                   >
                     {submitting ? (
                       <>
@@ -407,7 +521,7 @@ export default function W9FormCompletion({ params }: { params: Promise<{ id: str
                       </>
                     ) : (
                       <>
-                        <Shield className="w-5 h-5 mr-2" />
+                        <CheckCircle className="w-6 h-6 mr-3 group-hover:scale-110 transition-transform" />
                         Submit & Generate W-9 Form
                       </>
                     )}
@@ -416,10 +530,20 @@ export default function W9FormCompletion({ params }: { params: Promise<{ id: str
               </form>
 
               {/* Security Notice */}
-              <div className="mt-8 pt-6 border-t border-border">
-                <div className="flex items-center justify-center space-x-3 text-sm text-muted-foreground">
-                  <Shield className="w-5 h-5 text-green-600" />
-                  <span>Your information is protected with 256-bit SSL encryption and is fully compliant with IRS regulations.</span>
+              <div 
+                className="mt-12 pt-8 border-t border-gray-200/60 bg-gradient-to-r from-green-50/50 to-emerald-50/50 rounded-2xl p-6"
+                style={{
+                  boxShadow: `0 4px 12px -2px rgba(34, 197, 94, 0.1)`
+                }}
+              >
+                <div className="flex items-center justify-center space-x-4">
+                  <div className="w-10 h-10 rounded-2xl bg-green-100 flex items-center justify-center">
+                    <Shield className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div className="text-center">
+                    <p className="text-green-700 font-semibold">256-bit SSL Encryption</p>
+                    <p className="text-sm text-green-600/80 font-medium">IRS compliant • Fully secure • GDPR protected</p>
+                  </div>
                 </div>
               </div>
             </div>
