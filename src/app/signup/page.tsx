@@ -19,7 +19,7 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/30">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100">
       <Header />
 
       {/* Main Content */}
@@ -28,8 +28,8 @@ export default function SignUpPage() {
           {/* Background Card */}
           <div className="relative overflow-hidden rounded-2xl bg-card border shadow-large p-8 md:p-12">
             {/* Decorative Elements */}
-            <div className="absolute -top-4 -right-4 w-20 h-20 bg-primary/10 rounded-full blur-xl"></div>
-            <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-primary/5 rounded-full blur-2xl"></div>
+            <div className="absolute -top-4 -right-4 w-20 h-20 bg-blue-500/10 rounded-full blur-xl"></div>
+            <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-blue-400/5 rounded-full blur-2xl"></div>
 
             <div className="relative">
               {/* Header */}
