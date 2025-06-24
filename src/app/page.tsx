@@ -1,347 +1,307 @@
-import { Shield, Users, BarChart3, Menu } from "lucide-react"
+import { Shield, ArrowRight, Zap, Users, CheckCircle, Sparkles, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { ShieldCheck } from "lucide-react"
+import Link from "next/link"
 import Header from '@/components/Header';
 
 export default function HomePage() {
   return (
-    <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-background">
-      <div className="flex h-full grow flex-col">
-        <Header />
-        <main className="flex-1">
-          {/* Hero Section */}
-          <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-br from-slate-50 to-blue-100">
-            <div className="container mx-auto px-6">
-              <div className="grid items-center gap-12 md:grid-cols-2 md:gap-16">
-                <div className="aspect-square w-full rounded-xl bg-primary/10 p-4 sm:p-6 md:p-8 shadow-lg flex items-center justify-center">
-                  <svg
-                    className="h-full w-full object-contain text-primary"
-                    viewBox="0 0 500 500"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <rect fill="currentColor" className="text-primary/10" height="500" width="500" x="0" y="0" />
-                    <g transform="translate(50 50)">
-                      <rect
-                        fill="#FFFFFF"
-                        height="150"
-                        rx="10"
-                        stroke="currentColor"
-                        strokeWidth="5"
-                        width="200"
-                        x="100"
-                        y="150"
-                      />
-                      <circle cx="200" cy="100" fill="currentColor" r="30" />
-                      <rect fill="#FFFFFF" height="70" width="50" x="175" y="130" />
-                      <path d="M150 280 Q200 320 250 280" fill="none" stroke="currentColor" strokeWidth="5" />
-                      <line stroke="currentColor" strokeWidth="5" x1="130" x2="130" y1="180" y2="250" />
-                      <line stroke="currentColor" strokeWidth="5" x1="270" x2="270" y1="180" y2="250" />
-                      <rect fill="currentColor" className="opacity-10" height="100" width="160" x="120" y="170" />
-                      <line stroke="currentColor" strokeWidth="3" x1="130" x2="250" y1="190" y2="190" />
-                      <line stroke="currentColor" strokeWidth="3" x1="130" x2="230" y1="210" y2="210" />
-                      <line stroke="currentColor" strokeWidth="3" x1="130" x2="250" y1="230" y2="230" />
-                    </g>
-                  </svg>
-                </div>
-                <div className="flex flex-col gap-6 text-center md:text-left">
-                  <div className="flex flex-col gap-4">
-                    <h1 className="text-4xl font-bold tracking-tight text-gray-800 sm:text-5xl lg:text-6xl">
-                      Simplify Your <span className="text-primary">Form W9</span> Process
-                    </h1>
-                    <p className="text-lg text-muted-foreground">
-                      Our app streamlines the collection and management of Form W9, making it easier for businesses to
-                      gather necessary information from vendors and contractors.
-                    </p>
-                  </div>
-                  <Button size="lg" className="self-center md:self-start">
-                    Get Started Today
-                  </Button>
-                  <div className="flex items-center gap-4 mt-4 justify-center md:justify-start">
-                      <Badge variant="success">
-                        <ShieldCheck className="w-4 h-4 mr-1.5" />
-                        IRS Compliant
-                      </Badge>
-                      <Badge>
-                        <ShieldCheck className="w-4 h-4 mr-1.5" />
-                        Secure & Safe
-                      </Badge>
-                    </div>
-                </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
+      <Header />
+      
+      <main>
+        {/* Hero Section */}
+        <section className="pt-20 pb-32 px-4">
+          <div className="container mx-auto max-w-6xl">
+            <div className="text-center mb-16">
+              
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 to-blue-600/10 border border-primary/20 mb-8">
+                <Sparkles className="w-4 h-4 text-primary" />
+                <span className="text-sm font-medium text-primary">Trusted by 1000+ businesses</span>
               </div>
-            </div>
-          </section>
 
-          {/* Features Section */}
-          <section className="bg-muted/50 py-20 md:py-28" id="features">
-            <div className="container mx-auto px-6">
-              <div className="grid items-center gap-12 md:grid-cols-2 md:gap-16">
-                <div className="flex flex-col gap-8 text-center md:text-left md:order-last">
-                  <div className="flex flex-col gap-4">
-                    <h2 className="text-3xl font-bold tracking-tight text-gray-800 md:text-4xl">
-                      Key <span className="text-primary">Features</span>
-                    </h2>
-                    <p className="text-lg text-muted-foreground">
-                      Our app offers a range of features designed to simplify the Form W9 process for businesses of all
-                      sizes.
-                    </p>
-                  </div>
-                  <div className="flex flex-col gap-8">
-                    <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 text-primary">
-                        <Shield className="h-7 w-7" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-foreground">Secure Data Collection</h3>
-                        <p className="text-base text-muted-foreground">
-                          Collect Form W9 data securely with encryption and compliance features.
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 text-primary">
-                        <Users className="h-7 w-7" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-foreground">User-Friendly Interface</h3>
-                        <p className="text-base text-muted-foreground">
-                          Our intuitive interface makes it easy for vendors and contractors to submit their information.
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 text-primary">
-                        <BarChart3 className="h-7 w-7" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-foreground">Automated Reporting</h3>
-                        <p className="text-base text-muted-foreground">
-                          Generate reports and track submissions effortlessly with our automated reporting tools.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="aspect-square w-full rounded-xl bg-primary/10 p-4 sm:p-6 md:p-8 shadow-lg flex items-center justify-center">
-                  <svg
-                    className="h-full w-full object-contain text-primary"
-                    viewBox="0 0 500 500"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <rect fill="currentColor" className="text-primary/10" height="500" width="500" x="0" y="0" />
-                    <g transform="translate(50 50)">
-                      <rect fill="currentColor" className="text-primary" height="200" rx="15" width="100" x="150" y="100" />
-                      <rect fill="#FFFFFF" height="180" width="80" x="160" y="110" />
-                      <text
-                        fill="currentColor"
-                        className="text-primary"
-                        fontFamily="Arial, sans-serif"
-                        fontSize="20"
-                        fontWeight="bold"
-                        textAnchor="middle"
-                        x="200"
-                        y="140"
-                      >
-                        W-9
-                      </text>
-                      <line stroke="#B0BEC5" strokeWidth="2" x1="170" x2="230" y1="160" y2="160" />
-                      <line stroke="#B0BEC5" strokeWidth="2" x1="170" x2="230" y1="175" y2="175" />
-                      <line stroke="#B0BEC5" strokeWidth="2" x1="170" x2="200" y1="190" y2="190" />
-                      <line stroke="#B0BEC5" strokeWidth="2" x1="170" x2="230" y1="205" y2="205" />
-                      <rect fill="currentColor" className="text-primary" height="20" rx="5" width="60" x="170" y="220" />
-                      <text
-                        fill="#FFFFFF"
-                        fontFamily="Arial, sans-serif"
-                        fontSize="10"
-                        textAnchor="middle"
-                        x="200"
-                        y="234"
-                      >
-                        SUBMIT
-                      </text>
-                      <circle cx="280" cy="120" fill="#FFFFFF" r="20" stroke="currentColor" strokeWidth="3" />
-                      <path d="M273 120 L280 127 L287 115" fill="none" stroke="currentColor" strokeWidth="3" />
-                    </g>
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </section>
+              {/* Main Headline */}
+              <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
+                W-9 forms made
+                <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent block">
+                  beautifully simple
+                </span>
+              </h1>
 
-          {/* How It Works Section */}
-          <section id="how-it-works" className="bg-white py-20 md:py-28">
-            <div className="container mx-auto px-6">
-              <div className="flex flex-col gap-12">
-                <div className="flex flex-col gap-4 text-center">
-                  <h2 className="text-3xl font-bold tracking-tight text-gray-800 md:text-4xl">
-                    How It Works: Your Journey to W9 Simplicity
-                  </h2>
-                  <p className="mx-auto max-w-3xl text-lg text-muted-foreground">
-                    Discover how our Form W9 app transforms a complex process into a few simple steps, from initial setup to successful compliance.
-                  </p>
-                </div>
-                <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-12">
-                  <div className="flex flex-col items-center gap-4 text-center">
-                    <div className="flex aspect-square w-full max-w-xs items-center justify-center rounded-xl bg-primary/10 p-6 shadow-lg">
-                      <svg className="h-full w-full object-contain text-primary" fill="none" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <rect fill="currentColor" className="text-primary/10" height="100" width="100" x="0" y="0"></rect>
-                        <path d="M25 65C25 55.0517 33.0517 47 43 47H57C66.9483 47 75 55.0517 75 65V70H25V65Z" fill="#FFFFFF" stroke="currentColor" strokeWidth="3"></path>
-                        <circle cx="50" cy="35" fill="#FFFFFF" r="12" stroke="currentColor" strokeWidth="3"></circle>
-                        <path d="M40 80H60" stroke="currentColor" strokeLinecap="round" strokeWidth="3"></path>
-                        <path d="M45 70V75" stroke="currentColor" strokeLinecap="round" strokeWidth="3"></path>
-                        <path d="M55 70V75" stroke="currentColor" strokeLinecap="round" strokeWidth="3"></path>
-                        <path d="M60 25L65 20" stroke="currentColor" strokeLinecap="round" strokeWidth="2"></path>
-                        <path d="M40 25L35 20" stroke="currentColor" strokeLinecap="round" strokeWidth="2"></path>
-                        <path d="M50 18L50 12" stroke="currentColor" strokeLinecap="round" strokeWidth="2"></path>
-                        <ellipse cx="68" cy="45" fill="#CFD8DC" rx="8" ry="4"></ellipse>
-                        <text fill="currentColor" className="text-primary" fontFamily="Arial, sans-serif" fontSize="10" fontWeight="bold" textAnchor="middle" x="68" y="47">?</text>
-                      </svg>
-                    </div>
-                    <h3 className="text-xl font-bold text-foreground">1. Initial Need</h3>
-                    <p className="text-base text-muted-foreground">You're facing the challenge of collecting W9 forms efficiently and securely.</p>
-                  </div>
-                  <div className="flex flex-col items-center gap-4 text-center">
-                    <div className="flex aspect-square w-full max-w-xs items-center justify-center rounded-xl bg-primary/10 p-6 shadow-lg">
-                      <svg className="h-full w-full object-contain text-primary" fill="none" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <rect fill="currentColor" className="text-primary/10" height="100" width="100" x="0" y="0"></rect>
-                        <rect fill="#FFFFFF" height="50" rx="5" stroke="currentColor" strokeWidth="3" width="60" x="20" y="25"></rect>
-                        <rect fill="currentColor" className="text-primary" height="8" rx="2" width="40" x="30" y="35"></rect>
-                        <rect fill="#CFD8DC" height="8" rx="2" width="30" x="30" y="48"></rect>
-                        <rect fill="#CFD8DC" height="8" rx="2" width="35" x="30" y="61"></rect>
-                        <path d="M65 50L78 50L72 60L78 70L65 70" fill="currentColor" stroke="#FFFFFF" strokeLinejoin="round" strokeWidth="2"></path>
-                        <circle cx="50" cy="50" fill="currentColor" className="text-primary/10" r="15" stroke="currentColor" strokeWidth="2" transform="translate(25, 10)"></circle>
-                        <path d="M70 38L73 41L78 36" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5"></path>
-                      </svg>
-                    </div>
-                    <h3 className="text-xl font-bold text-foreground">2. Solution Engagement</h3>
-                    <p className="text-base text-muted-foreground">Our app provides an intuitive platform to request, complete, and manage W9 forms.</p>
-                  </div>
-                  <div className="flex flex-col items-center gap-4 text-center">
-                    <div className="flex aspect-square w-full max-w-xs items-center justify-center rounded-xl bg-primary/10 p-6 shadow-lg">
-                      <svg className="h-full w-full object-contain text-primary" fill="none" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <rect fill="currentColor" className="text-primary/10" height="100" width="100" x="0" y="0"></rect>
-                        <path d="M25 75H75V40C75 31.7157 68.2843 25 60 25H40C31.7157 25 25 31.7157 25 40V75Z" fill="currentColor"></path>
-                        <rect fill="#FFFFFF" height="30" rx="3" width="40" x="30" y="40"></rect>
-                        <path d="M40 50L48 58L60 45" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3"></path>
-                        <path d="M40 85L45 80L50 85L55 80L60 85" fill="none" stroke="#CFD8DC" strokeLinecap="round" strokeWidth="2"></path>
-                        <circle cx="70" cy="30" fill="#FFFFFF" r="8" stroke="currentColor" strokeWidth="2"></circle>
-                        <path d="M67 30L70 33L73 28" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"></path>
-                      </svg>
-                    </div>
-                    <h3 className="text-xl font-bold text-foreground">3. Successful Outcome</h3>
-                    <p className="text-base text-muted-foreground">Enjoy streamlined compliance, organized data, and peace of mind.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* CTA Section */}
-          <section id="cta" className="bg-background py-20 md:py-28">
-            <div className="container mx-auto px-6">
-              <div className="grid items-center gap-12 md:grid-cols-2 md:gap-16">
-                <div className="aspect-square w-full rounded-xl bg-primary/10 p-4 sm:p-6 md:p-8 shadow-lg flex items-center justify-center">
-                  <svg
-                    className="h-full w-full object-contain text-primary"
-                    viewBox="0 0 500 500"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <rect fill="currentColor" className="text-primary/10" height="500" width="500" x="0" y="0" />
-                    <g transform="translate(50 50)">
-                      <circle cx="100" cy="150" fill="currentColor" r="30" />
-                      <rect fill="#FFFFFF" height="100" stroke="currentColor" strokeWidth="3" width="60" x="70" y="180" />
-                      <line stroke="currentColor" strokeWidth="2" x1="80" x2="120" y1="200" y2="200" />
-                      <line stroke="currentColor" strokeWidth="2" x1="80" x2="120" y1="220" y2="220" />
-                      <circle cx="300" cy="150" fill="currentColor" r="30" />
-                      <rect fill="#FFFFFF" height="100" stroke="currentColor" strokeWidth="3" width="60" x="270" y="180" />
-                      <line stroke="currentColor" strokeWidth="2" x1="280" x2="320" y1="200" y2="200" />
-                      <line stroke="currentColor" strokeWidth="2" x1="280" x2="320" y1="220" y2="220" />
-                      <rect
-                        fill="#FFFFFF"
-                        height="60"
-                        rx="5"
-                        stroke="currentColor"
-                        strokeWidth="3"
-                        width="100"
-                        x="150"
-                        y="180"
-                      />
-                      <line stroke="#B0BEC5" strokeWidth="2" x1="160" x2="240" y1="195" y2="195" />
-                      <line stroke="#B0BEC5" strokeWidth="2" x1="160" x2="220" y1="210" y2="210" />
-                      <path
-                        d="M135 190 L145 180 M135 190 L145 200 M135 190 H 150"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="3"
-                      />
-                      <path
-                        d="M265 210 L255 200 M265 210 L255 220 M265 210 H 250"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="3"
-                      />
-                      <line stroke="currentColor" strokeDasharray="5,5" strokeWidth="2" x1="50" x2="80" y1="250" y2="250" />
-                      <line
-                        stroke="currentColor"
-                        strokeDasharray="5,5"
-                        strokeWidth="2"
-                        x1="320"
-                        x2="350"
-                        y1="250"
-                        y2="250"
-                      />
-                    </g>
-                  </svg>
-                </div>
-                <div className="flex flex-col gap-6 text-center md:text-left">
-                  <div className="flex flex-col gap-4">
-                    <h2 className="text-3xl font-bold tracking-tight text-gray-800 md:text-4xl">
-                      Ready to Simplify Your <span className="text-primary">Form W9</span> Process?
-                    </h2>
-                    <p className="text-lg text-muted-foreground">
-                      Sign up today and experience the benefits of our streamlined Form W9 app.
-                    </p>
-                  </div>
-                  <Button size="lg" className="self-center md:self-start">
-                    Get Started for Free
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </section>
-        </main>
-
-        {/* Footer */}
-        <footer className="border-t bg-muted/50">
-          <div className="container mx-auto px-6 py-8">
-            <div className="flex flex-col items-center gap-6 text-center md:flex-row md:justify-between">
-              <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-4">
-                <a
-                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                  href="#"
-                >
-                  Terms of Service
-                </a>
-                <a
-                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                  href="#"
-                >
-                  Privacy Policy
-                </a>
-                <a
-                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                  href="#support"
-                >
-                  Contact Us
-                </a>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                © 2024 Form W9 App. All rights reserved.
+              {/* Subheadline */}
+              <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
+                Transform your tax form collection from chaos to clarity. 
+                Send, collect, and manage W-9 forms with zero hassle.
               </p>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+                <Link href="/signup">
+                  <Button 
+                    size="lg" 
+                    className="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white font-medium px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 group"
+                  >
+                    Start for free
+                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-0.5 transition-transform" />
+                  </Button>
+                </Link>
+                <Link href="/demo">
+                  <Button 
+                    variant="outline" 
+                    size="lg"
+                    className="border-2 border-gray-200 hover:border-primary text-gray-700 hover:text-primary px-8 py-4 rounded-xl transition-all duration-200"
+                  >
+                    Watch demo
+                  </Button>
+                </Link>
+              </div>
+
+              {/* Social Proof */}
+              <div className="flex items-center justify-center gap-6 text-sm text-gray-500">
+                <div className="flex items-center gap-1">
+                  <div className="flex">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+                  <span className="ml-2">4.9/5 from 200+ reviews</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Hero Visual */}
+            <div className="relative max-w-4xl mx-auto">
+              <div 
+                className="bg-white/90 backdrop-blur-sm border border-gray-200/60 rounded-3xl p-8 shadow-2xl"
+                style={{
+                  boxShadow: `
+                    0 25px 50px -12px rgba(0, 0, 0, 0.25),
+                    0 10px 20px -8px rgba(0, 0, 0, 0.15),
+                    0 4px 15px -3px rgba(0, 0, 0, 0.1)
+                  `
+                }}
+              >
+                {/* Mock Dashboard Preview */}
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between pb-4 border-b border-gray-100">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-primary to-blue-600 flex items-center justify-center">
+                        <Shield className="w-4 h-4 text-white" />
+                      </div>
+                      <span className="font-semibold text-gray-900">W-9 Command Center</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                      <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+                      <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 text-center">
+                      <div className="text-2xl font-bold text-blue-600">18</div>
+                      <div className="text-sm text-blue-600/70">Total Requests</div>
+                    </div>
+                    <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 text-center">
+                      <div className="text-2xl font-bold text-green-600">15</div>
+                      <div className="text-sm text-green-600/70">Completed</div>
+                    </div>
+                    <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl p-4 text-center">
+                      <div className="text-2xl font-bold text-amber-600">3</div>
+                      <div className="text-sm text-amber-600/70">Pending</div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    {[
+                      { name: "Acme Corp", status: "completed", email: "finance@acme.com" },
+                      { name: "TechStart Inc", status: "pending", email: "admin@techstart.io" },
+                      { name: "Global Solutions", status: "completed", email: "contact@global.com" }
+                    ].map((item, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 flex items-center justify-center text-white text-sm font-medium">
+                            {item.name.charAt(0)}
+                          </div>
+                          <div>
+                            <div className="font-medium text-gray-900">{item.name}</div>
+                            <div className="text-sm text-gray-500">{item.email}</div>
+                          </div>
+                        </div>
+                        <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          item.status === 'completed' 
+                            ? 'bg-green-100 text-green-700' 
+                            : 'bg-amber-100 text-amber-700'
+                        }`}>
+                          {item.status}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </footer>
-      </div>
+        </section>
+
+        {/* Features Section */}
+        <section className="py-24 px-4">
+          <div className="container mx-auto max-w-6xl">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                Everything you need
+              </h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                Powerful features that make W-9 collection effortless
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                {
+                  icon: Zap,
+                  title: "Lightning fast",
+                  description: "Send requests and get completed forms back in minutes, not days"
+                },
+                {
+                  icon: Shield,
+                  title: "Bank-level security",
+                  description: "256-bit SSL encryption keeps sensitive tax data completely secure"
+                },
+                {
+                  icon: Users,
+                  title: "Zero friction",
+                  description: "Vendors complete forms without creating accounts or downloading apps"
+                }
+              ].map((feature, index) => (
+                <div key={index} className="text-center group">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-primary/10 to-blue-600/10 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-200">
+                    <feature.icon className="w-8 h-8 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* How It Works */}
+        <section className="py-24 px-4 bg-gradient-to-br from-gray-50 to-gray-100">
+          <div className="container mx-auto max-w-4xl">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                How it works
+              </h2>
+              <p className="text-xl text-gray-600">
+                Three simple steps to W-9 success
+              </p>
+            </div>
+
+            <div className="space-y-12">
+              {[
+                {
+                  step: "01",
+                  title: "Send request",
+                  description: "Enter vendor details and we'll send them a secure, personalized link"
+                },
+                {
+                  step: "02", 
+                  title: "They complete",
+                  description: "Vendors fill out the W-9 form online - no account required"
+                },
+                {
+                  step: "03",
+                  title: "You download",
+                  description: "Get notified instantly and download the completed, IRS-compliant form"
+                }
+              ].map((step, index) => (
+                <div key={index} className="flex items-center gap-8">
+                  <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-r from-primary to-blue-600 flex items-center justify-center text-white font-bold text-lg">
+                    {step.step}
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-semibold text-gray-900 mb-2">
+                      {step.title}
+                    </h3>
+                    <p className="text-gray-600 text-lg">
+                      {step.description}
+                    </p>
+                  </div>
+                  {index < 2 && (
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center">
+                      <ArrowRight className="w-4 h-4 text-gray-400" />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Final CTA */}
+        <section className="py-24 px-4">
+          <div className="container mx-auto max-w-4xl text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-100 text-green-700 text-sm font-medium mb-6">
+              <CheckCircle className="w-4 h-4" />
+              Free forever for up to 5 requests per month
+            </div>
+            
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              Ready to simplify your
+              <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent block">
+                W-9 process?
+              </span>
+            </h2>
+            
+            <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
+              Join thousands of businesses who've escaped W-9 chaos with Signica
+            </p>
+
+            <Link href="/signup">
+              <Button 
+                size="lg" 
+                className="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white font-medium px-12 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 group text-lg"
+              >
+                Start for free today
+                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-0.5 transition-transform" />
+              </Button>
+            </Link>
+
+            <p className="text-sm text-gray-500 mt-4">
+              No credit card required • Setup in under 2 minutes
+            </p>
+          </div>
+        </section>
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t border-gray-200 py-12 px-4">
+        <div className="container mx-auto max-w-6xl">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="flex items-center gap-3 mb-4 md:mb-0">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-primary to-blue-600 flex items-center justify-center">
+                <Shield className="w-4 h-4 text-white" />
+              </div>
+              <span className="font-semibold text-gray-900">Signica</span>
+            </div>
+            
+            <div className="flex items-center gap-8 text-sm text-gray-600">
+              <Link href="/terms" className="hover:text-gray-900 transition-colors">Terms</Link>
+              <Link href="/privacy" className="hover:text-gray-900 transition-colors">Privacy</Link>
+              <Link href="/support" className="hover:text-gray-900 transition-colors">Support</Link>
+            </div>
+          </div>
+          
+          <div className="border-t border-gray-200 mt-8 pt-8 text-center text-sm text-gray-500">
+            © 2024 Signica. All rights reserved.
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
