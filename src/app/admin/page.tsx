@@ -9,6 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import Link from "next/link"
 import { useAuth } from "@/contexts/AuthContext"
 import { getW9Requests, getW9RequestStats } from "@/lib/database"
+import { RequireAuth } from "@/components/AuthGuard"
 import type { W9Request } from "@/lib/supabase"
 
 // Remove hardcoded data - we'll use real Supabase data
@@ -21,12 +22,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  // Redirect if not logged in
-  useEffect(() => {
-    if (!user) {
-      router.push('/login')
-    }
-  }, [user, router])
+  // Auth guard will handle authentication
 
   // Load W9 requests and stats
   useEffect(() => {
@@ -60,9 +56,7 @@ export default function AdminDashboard() {
     router.push('/')
   }
 
-  if (!user) {
-    return <div>Redirecting...</div>
-  }
+  // Auth guard handles this
 
   if (loading) {
     return (
@@ -75,7 +69,8 @@ export default function AdminDashboard() {
     )
   }
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100">
+    <RequireAuth>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100">
       {/* Modern Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-6 lg:px-8">
@@ -278,6 +273,7 @@ export default function AdminDashboard() {
           </div>
         </div>
       </main>
-    </div>
+      </div>
+    </RequireAuth>
   )
 }

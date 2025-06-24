@@ -6,13 +6,15 @@ import { Shield } from "lucide-react"
 import Link from "next/link"
 import Header from "@/components/Header"
 import { useAuth } from "@/contexts/AuthContext"
+import { RequireNoAuth } from "@/components/AuthGuard"
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
-  const { login, user, isLoading } = useAuth()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { login, user } = useAuth()
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -24,30 +26,32 @@ export default function LoginPage() {
     }
   }, [searchParams])
 
-  // Redirect if already logged in
-  useEffect(() => {
-    if (user) {
-      router.push('/admin')
-    }
-  }, [user, router])
+  // This will be handled by RequireNoAuth component
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
 
-    const success = await login(email, password)
-    if (success) {
-      router.push('/admin')
-    } else {
-      setError('Invalid email or password. Try admin@formw9.com / admin123')
+    if (!email || !password) {
+      setError('Please fill in all fields')
+      return
     }
-  }
 
-  if (user) {
-    return <div>Redirecting...</div>
+    setIsSubmitting(true)
+
+    const result = await login(email, password)
+
+    if (result.success) {
+      // AuthGuard will handle the redirect
+    } else {
+      setError(result.error || 'Invalid email or password')
+    }
+
+    setIsSubmitting(false)
   }
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100">
+    <RequireNoAuth>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-100">
       <Header />
 
       {/* Main Content */}
@@ -73,10 +77,7 @@ export default function LoginPage() {
                 <p className="mt-3 text-lg text-muted-foreground">
                   Sign in to your Signica account
                 </p>
-                <div className="mt-4 inline-flex items-center rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
-                  <Shield className="w-4 h-4 mr-2" />
-                  Demo: admin@signica.com / admin123
-                </div>
+
               </div>
 
               {/* Success Message */}
@@ -103,7 +104,7 @@ export default function LoginPage() {
                     className="flex w-full rounded-xl border border-input bg-background px-4 py-3 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
                     id="email"
                     name="email"
-                    placeholder="admin@signica.com"
+                    placeholder="Enter your email address"
                     required
                     type="email"
                     value={email}
@@ -124,7 +125,7 @@ export default function LoginPage() {
                     className="flex w-full rounded-xl border border-input bg-background px-4 py-3 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
                     id="password"
                     name="password"
-                    placeholder="admin123"
+                    placeholder="Enter your password"
                     required
                     type="password"
                     value={password}
@@ -147,9 +148,9 @@ export default function LoginPage() {
                 <button
                   className="inline-flex items-center justify-center rounded-xl text-base font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-xl h-12 px-8 w-full"
                   type="submit"
-                  disabled={isLoading}
+                  disabled={isSubmitting}
                 >
-                  {isLoading ? (
+                  {isSubmitting ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
                       Signing in...
@@ -198,6 +199,7 @@ export default function LoginPage() {
           </div>
         </div>
       </main>
-    </div>
+      </div>
+    </RequireNoAuth>
   )
 }

@@ -281,3 +281,84 @@ export async function generateDirectFormLink(requestId: string): Promise<string>
     throw new DatabaseError('Failed to generate form link')
   }
 }
+
+// Role Detection Operations
+export interface UserRole {
+  isAdmin: boolean
+  isCandidate: boolean
+  primaryRole: 'admin' | 'candidate' | 'both' | 'none'
+}
+
+export async function getUserRole(userId: string, userEmail: string): Promise<UserRole> {
+  try {
+    // Check if user is an admin (has created W-9 requests)
+    const { data: adminRequests, error: adminError } = await supabase
+      .from(TABLES.W9_REQUESTS)
+      .select('id')
+      .eq('created_by', userId)
+      .limit(1)
+
+    if (adminError) {
+      throw new DatabaseError(adminError.message)
+    }
+
+    // Check if user is a candidate (has received W-9 requests)
+    const { data: candidateRequests, error: candidateError } = await supabase
+      .from(TABLES.W9_REQUESTS)
+      .select('id')
+      .eq('vendor_email', userEmail)
+      .limit(1)
+
+    if (candidateError) {
+      throw new DatabaseError(candidateError.message)
+    }
+
+    const isAdmin = adminRequests && adminRequests.length > 0
+    const isCandidate = candidateRequests && candidateRequests.length > 0
+
+    let primaryRole: 'admin' | 'candidate' | 'both' | 'none'
+    if (isAdmin && isCandidate) {
+      primaryRole = 'both'
+    } else if (isAdmin) {
+      primaryRole = 'admin'
+    } else if (isCandidate) {
+      primaryRole = 'candidate'
+    } else {
+      primaryRole = 'none'
+    }
+
+    return {
+      isAdmin,
+      isCandidate,
+      primaryRole
+    }
+  } catch (error) {
+    if (error instanceof DatabaseError) {
+      throw error
+    }
+    throw new DatabaseError('Failed to determine user role')
+  }
+}
+
+export async function getDefaultDashboardRoute(userId: string, userEmail: string): Promise<string> {
+  try {
+    const role = await getUserRole(userId, userEmail)
+
+    switch (role.primaryRole) {
+      case 'admin':
+        return '/admin'
+      case 'candidate':
+        return '/candidate'
+      case 'both':
+        // For users who are both admin and candidate, default to admin
+        return '/admin'
+      case 'none':
+      default:
+        // New users with no role yet - default to admin (they'll likely create requests)
+        return '/admin'
+    }
+  } catch (error) {
+    // If role detection fails, default to admin dashboard
+    return '/admin'
+  }
+}

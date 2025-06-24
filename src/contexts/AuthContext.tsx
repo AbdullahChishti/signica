@@ -1,20 +1,24 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
-import { AuthUser, signIn, signOut, getCurrentUser, onAuthStateChange } from '@/lib/auth'
+import { supabase } from '@/lib/supabase'
+import { getUserRole, getDefaultDashboardRoute, type UserRole } from '@/lib/database'
+import type { User as SupabaseUser } from '@supabase/supabase-js'
 
 interface User {
   id: string
   email: string
   name: string
-  role: 'admin' | 'user'
+  role: UserRole
+  defaultDashboard: string
 }
 
 interface AuthContextType {
   user: User | null
-  login: (email: string, password: string) => Promise<boolean>
-  logout: () => void
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>
+  logout: () => Promise<void>
   isLoading: boolean
+  isInitialized: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -22,80 +26,124 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [isInitialized, setIsInitialized] = useState(false)
 
-  // Check for existing session on mount
+  // Initialize auth state and listen for changes
   useEffect(() => {
-    // Get initial user from Supabase
-    getCurrentUser()
-      .then((authUser) => {
-        if (authUser) {
-          setUser({
-            id: authUser.id,
-            email: authUser.email,
-            name: authUser.name,
-            role: 'admin' // For now, all users are admins
-          })
+    let mounted = true
+
+    // Get initial session
+    const initializeAuth = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession()
+
+        if (error) {
+          console.error('Error getting session:', error)
+          return
         }
-      })
-      .catch((error) => {
-        console.error('Error getting current user:', error)
-      })
-      .finally(() => {
-        setIsLoading(false)
-      })
+
+        if (session?.user && mounted) {
+          await setUserWithRole(session.user)
+        }
+      } catch (error) {
+        console.error('Error initializing auth:', error)
+      } finally {
+        if (mounted) {
+          setIsLoading(false)
+          setIsInitialized(true)
+        }
+      }
+    }
+
+    initializeAuth()
 
     // Listen for auth state changes
-    const { data: { subscription } } = onAuthStateChange((authUser) => {
-      if (authUser) {
-        setUser({
-          id: authUser.id,
-          email: authUser.email,
-          name: authUser.name,
-          role: 'admin'
-        })
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (!mounted) return
+
+      setIsLoading(true)
+
+      if (session?.user) {
+        await setUserWithRole(session.user)
       } else {
         setUser(null)
       }
+
       setIsLoading(false)
     })
 
     return () => {
+      mounted = false
       subscription.unsubscribe()
     }
   }, [])
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const setUserWithRole = async (supabaseUser: SupabaseUser) => {
+    try {
+      const [role, defaultDashboard] = await Promise.all([
+        getUserRole(supabaseUser.id, supabaseUser.email!),
+        getDefaultDashboardRoute(supabaseUser.id, supabaseUser.email!)
+      ])
+
+      const userName = supabaseUser.user_metadata?.name ||
+                      supabaseUser.email?.split('@')[0] ||
+                      'User'
+
+      setUser({
+        id: supabaseUser.id,
+        email: supabaseUser.email!,
+        name: userName,
+        role,
+        defaultDashboard
+      })
+    } catch (error) {
+      console.error('Error setting user with role:', error)
+      // Set user without role info if role detection fails
+      setUser({
+        id: supabaseUser.id,
+        email: supabaseUser.email!,
+        name: supabaseUser.user_metadata?.name || supabaseUser.email?.split('@')[0] || 'User',
+        role: { isAdmin: false, isCandidate: false, primaryRole: 'none' },
+        defaultDashboard: '/admin'
+      })
+    }
+  }
+
+  const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
     setIsLoading(true)
 
     try {
-      const { user: authUser } = await signIn(email, password)
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      })
 
-      if (authUser) {
-        const currentUser = await getCurrentUser()
-        if (currentUser) {
-          setUser({
-            id: currentUser.id,
-            email: currentUser.email,
-            name: currentUser.name,
-            role: 'admin'
-          })
-          setIsLoading(false)
-          return true
-        }
+      if (error) {
+        setIsLoading(false)
+        return { success: false, error: error.message }
+      }
+
+      if (data.user) {
+        await setUserWithRole(data.user)
+        setIsLoading(false)
+        return { success: true }
       }
 
       setIsLoading(false)
-      return false
-    } catch (error) {
+      return { success: false, error: 'Login failed' }
+    } catch (error: any) {
       console.error('Login error:', error)
       setIsLoading(false)
-      return false
+      return { success: false, error: error.message || 'Login failed' }
     }
   }
 
   const logout = async () => {
     try {
-      await signOut()
+      const { error } = await supabase.auth.signOut()
+      if (error) {
+        console.error('Logout error:', error)
+      }
       setUser(null)
     } catch (error) {
       console.error('Logout error:', error)
@@ -103,7 +151,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, login, logout, isLoading, isInitialized }}>
       {children}
     </AuthContext.Provider>
   )
