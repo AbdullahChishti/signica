@@ -77,8 +77,8 @@ export default function RequestW9Form() {
               </span>
             </h1>
             
-            <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
-              Fire off a W-9 request in seconds. Your vendor gets a secure link, you get peace of mind.
+            <p className="text-xl text-gray-600/90 mb-12 max-w-xl mx-auto leading-relaxed font-medium">
+              Fire off W-9 requests in seconds. <span className="text-gray-700">Secure links, instant peace of mind.</span>
             </p>
           </div>
 
@@ -115,7 +115,7 @@ export default function RequestW9Form() {
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-2 text-lg">Email Delivery</h4>
-                      <p className="text-gray-600 leading-relaxed">We'll send a secure email to your vendor with a personalized W-9 form link</p>
+                      <p className="text-gray-600/90 leading-relaxed font-medium">Secure email with personalized link</p>
                     </div>
                   </div>
                   
@@ -127,7 +127,7 @@ export default function RequestW9Form() {
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-2 text-lg">Secure Completion</h4>
-                      <p className="text-gray-600 leading-relaxed">They complete the form online with bank-level security and encryption</p>
+                      <p className="text-gray-600/90 leading-relaxed font-medium">Bank-level security, zero friction</p>
                     </div>
                   </div>
                   
@@ -139,7 +139,7 @@ export default function RequestW9Form() {
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-2 text-lg">Instant Notification</h4>
-                      <p className="text-gray-600 leading-relaxed">You receive instant notification and can download the completed W-9 form</p>
+                      <p className="text-gray-600/90 leading-relaxed font-medium">IRS-ready PDF, delivered instantly</p>
                     </div>
                   </div>
                 </div>
@@ -198,8 +198,8 @@ export default function RequestW9Form() {
                   <h3 className="text-2xl font-bold text-gray-900">Need help?</h3>
                 </div>
                 
-                <p className="text-gray-600 mb-6 leading-relaxed">
-                  Our support team is here to help you with any questions about the W-9 request process.
+                <p className="text-gray-600/90 mb-6 leading-relaxed font-medium">
+                  Questions about W-9 requests? <span className="text-gray-700">We're here to help.</span>
                 </p>
                 
                 <div className="flex flex-col sm:flex-row gap-3">
@@ -241,7 +241,7 @@ export default function RequestW9Form() {
                       <Send className="w-8 h-8 text-primary" />
                     </div>
                     <h3 className="text-2xl font-bold text-gray-900 mb-2">Request Details</h3>
-                    <p className="text-gray-600">Enter the vendor information below to send a W-9 request.</p>
+                    <p className="text-gray-600/90 font-medium">Enter vendor info to <span className="text-gray-700">launch request</span></p>
                   </div>
 
                   {/* Error Message */}
@@ -279,7 +279,7 @@ export default function RequestW9Form() {
                           <Users className="w-5 h-5 text-gray-400" />
                         </div>
                       </div>
-                      <p className="text-xs text-gray-500 font-medium">Enter the legal business name or individual's full name</p>
+                      <p className="text-xs text-gray-500/80 font-medium">Legal business or full name</p>
                     </div>
 
                     {/* Vendor Email Field */}
@@ -301,7 +301,7 @@ export default function RequestW9Form() {
                           <Mail className="w-5 h-5 text-gray-400" />
                         </div>
                       </div>
-                      <p className="text-xs text-gray-500 font-medium">We'll send the W-9 form link to this email address</p>
+                      <p className="text-xs text-gray-500/80 font-medium">W-9 link destination</p>
                     </div>
 
                     {/* Send Request Button */}

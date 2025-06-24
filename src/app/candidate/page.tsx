@@ -113,8 +113,8 @@ export default function CandidateDashboard() {
               </span>
             </h1>
             
-            <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
-              Track and manage your W-9 form requests from various companies. Complete them quickly and securely.
+            <p className="text-xl text-gray-600/90 mb-12 max-w-xl mx-auto leading-relaxed font-medium">
+              Track W-9 requests. <span className="text-gray-700">Complete them quickly.</span>
             </p>
           </div>
 

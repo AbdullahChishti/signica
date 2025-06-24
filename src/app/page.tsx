@@ -29,9 +29,9 @@ export default function HomePage() {
               </h1>
 
               {/* Subheadline */}
-              <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
-                Transform your tax form collection from chaos to clarity. 
-                Send, collect, and manage W-9 forms with zero hassle.
+              <p className="text-xl text-gray-600/90 mb-12 max-w-xl mx-auto leading-relaxed font-medium">
+                Send, collect, manage W-9s. 
+                <span className="text-gray-700"> Zero hassle.</span>
               </p>
 
               {/* CTA Buttons */}
@@ -57,14 +57,14 @@ export default function HomePage() {
               </div>
 
               {/* Social Proof */}
-              <div className="flex items-center justify-center gap-6 text-sm text-gray-500">
+              <div className="flex items-center justify-center gap-6 text-sm text-gray-500/80">
                 <div className="flex items-center gap-1">
                   <div className="flex">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                     ))}
                   </div>
-                  <span className="ml-2">4.9/5 from 200+ reviews</span>
+                  <span className="ml-2 font-medium">4.9/5 from 200+ reviews</span>
                 </div>
               </div>
             </div>
@@ -151,8 +151,8 @@ export default function HomePage() {
               <h2 className="text-4xl font-bold text-gray-900 mb-4">
                 Everything you need
               </h2>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                Powerful features that make W-9 collection effortless
+              <p className="text-xl text-gray-600/90 max-w-lg mx-auto font-medium">
+                W-9 collection, <span className="text-gray-700">reimagined</span>
               </p>
             </div>
 
@@ -161,17 +161,17 @@ export default function HomePage() {
                 {
                   icon: Zap,
                   title: "Lightning fast",
-                  description: "Send requests and get completed forms back in minutes, not days"
+                  description: "Minutes, not days"
                 },
                 {
                   icon: Shield,
                   title: "Bank-level security",
-                  description: "256-bit SSL encryption keeps sensitive tax data completely secure"
+                  description: "256-bit SSL encryption"
                 },
                 {
                   icon: Users,
                   title: "Zero friction",
-                  description: "Vendors complete forms without creating accounts or downloading apps"
+                  description: "No accounts required"
                 }
               ].map((feature, index) => (
                 <div key={index} className="text-center group">
@@ -181,7 +181,7 @@ export default function HomePage() {
                   <h3 className="text-xl font-semibold text-gray-900 mb-3">
                     {feature.title}
                   </h3>
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-gray-600/90 font-medium">
                     {feature.description}
                   </p>
                 </div>
@@ -191,14 +191,14 @@ export default function HomePage() {
         </section>
 
         {/* How It Works */}
-        <section className="py-24 px-4 bg-gradient-to-br from-gray-50 to-gray-100">
+        <section className="py-24 px-4 bg-gradient-to-br from-gray-50/50 to-gray-100/50">
           <div className="container mx-auto max-w-4xl">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-gray-900 mb-4">
                 How it works
               </h2>
-              <p className="text-xl text-gray-600">
-                Three simple steps to W-9 success
+              <p className="text-xl text-gray-600/90 font-medium">
+                Three steps to <span className="text-gray-700">W-9 success</span>
               </p>
             </div>
 
@@ -207,28 +207,28 @@ export default function HomePage() {
                 {
                   step: "01",
                   title: "Send request",
-                  description: "Enter vendor details and we'll send them a secure, personalized link"
+                  description: "Enter details, we handle the rest"
                 },
                 {
                   step: "02", 
                   title: "They complete",
-                  description: "Vendors fill out the W-9 form online - no account required"
+                  description: "One-click form completion"
                 },
                 {
                   step: "03",
                   title: "You download",
-                  description: "Get notified instantly and download the completed, IRS-compliant form"
+                  description: "IRS-ready PDF, instantly"
                 }
               ].map((step, index) => (
                 <div key={index} className="flex items-center gap-8">
-                  <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-r from-primary to-blue-600 flex items-center justify-center text-white font-bold text-lg">
+                  <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-r from-primary to-blue-600 flex items-center justify-center text-white font-bold text-lg shadow-lg">
                     {step.step}
                   </div>
                   <div>
                     <h3 className="text-2xl font-semibold text-gray-900 mb-2">
                       {step.title}
                     </h3>
-                    <p className="text-gray-600 text-lg">
+                    <p className="text-gray-600/90 text-lg font-medium">
                       {step.description}
                     </p>
                   </div>
@@ -246,20 +246,20 @@ export default function HomePage() {
         {/* Final CTA */}
         <section className="py-24 px-4">
           <div className="container mx-auto max-w-4xl text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-100 text-green-700 text-sm font-medium mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-100/80 backdrop-blur-sm text-green-700 text-sm font-medium mb-6">
               <CheckCircle className="w-4 h-4" />
-              Free forever for up to 5 requests per month
+              Free forever • 5 requests per month
             </div>
             
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Ready to simplify your
+              Ready to escape
               <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent block">
-                W-9 process?
+                W-9 chaos?
               </span>
             </h2>
             
-            <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
-              Join thousands of businesses who've escaped W-9 chaos with Signica
+            <p className="text-xl text-gray-600/90 mb-10 max-w-lg mx-auto font-medium">
+              Join 1000+ businesses using <span className="text-gray-700">Signica</span>
             </p>
 
             <Link href="/signup">
@@ -272,15 +272,15 @@ export default function HomePage() {
               </Button>
             </Link>
 
-            <p className="text-sm text-gray-500 mt-4">
-              No credit card required • Setup in under 2 minutes
+            <p className="text-sm text-gray-500/80 mt-4 font-medium">
+              No credit card • 2min setup
             </p>
           </div>
         </section>
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-gray-200 py-12 px-4">
+      <footer className="border-t border-gray-200/60 py-12 px-4 bg-white/50 backdrop-blur-sm">
         <div className="container mx-auto max-w-6xl">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center gap-3 mb-4 md:mb-0">
@@ -290,14 +290,14 @@ export default function HomePage() {
               <span className="font-semibold text-gray-900">Signica</span>
             </div>
             
-            <div className="flex items-center gap-8 text-sm text-gray-600">
+            <div className="flex items-center gap-8 text-sm text-gray-600/80 font-medium">
               <Link href="/terms" className="hover:text-gray-900 transition-colors">Terms</Link>
               <Link href="/privacy" className="hover:text-gray-900 transition-colors">Privacy</Link>
               <Link href="/support" className="hover:text-gray-900 transition-colors">Support</Link>
             </div>
           </div>
           
-          <div className="border-t border-gray-200 mt-8 pt-8 text-center text-sm text-gray-500">
+          <div className="border-t border-gray-200/60 mt-8 pt-8 text-center text-sm text-gray-500/80 font-medium">
             © 2024 Signica. All rights reserved.
           </div>
         </div>

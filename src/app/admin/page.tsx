@@ -81,8 +81,8 @@ export default function AdminDashboard() {
               </span>
             </h1>
             
-            <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
-              Your mission control for W-9 forms. Track requests, monitor progress, and celebrate completions.
+            <p className="text-xl text-gray-600/90 mb-12 max-w-xl mx-auto leading-relaxed font-medium">
+              Your mission control for W-9s. <span className="text-gray-700">Track, monitor, celebrate.</span>
             </p>
 
             <Link href="/admin/request">
