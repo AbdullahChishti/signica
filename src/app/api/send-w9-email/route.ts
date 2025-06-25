@@ -24,7 +24,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate the direct form link
-    const formLink = `${process.env.NEXT_PUBLIC_SITE_URL}/form/${requestId}?direct=true`
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || request.headers.get('origin') || 'https://your-domain.vercel.app'
+    const formLink = `${baseUrl}/form/${requestId}?direct=true`
 
     // Initialize Resend
     if (!process.env.RESEND_API_KEY) {
