@@ -49,6 +49,30 @@ export default function AdminDashboard() {
     }
   }
 
+  const handleDownload = async (requestId: string, vendorName: string) => {
+    try {
+      const response = await fetch(`/api/download-w9/${requestId}`)
+
+      if (!response.ok) {
+        throw new Error('Failed to download PDF')
+      }
+
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.style.display = 'none'
+      a.href = url
+      a.download = `W9_${vendorName.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+    } catch (error) {
+      console.error('Download error:', error)
+      alert('Failed to download PDF. Please try again.')
+    }
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
@@ -333,10 +357,11 @@ export default function AdminDashboard() {
                               </Button>
                             </Link>
                             {request.status === 'completed' && (
-                              <Button 
-                                variant="outline" 
-                                size="sm" 
+                              <Button
+                                variant="outline"
+                                size="sm"
                                 className="border-green-300 text-green-700 hover:border-green-500 hover:text-green-800 transition-all duration-200 rounded-xl"
+                                onClick={() => handleDownload(request.id, request.vendor_name)}
                               >
                                 <Download className="w-4 h-4 mr-2" />
                                 Download
