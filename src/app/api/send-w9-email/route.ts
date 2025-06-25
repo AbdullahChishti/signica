@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { Resend } from 'resend'
+import nodemailer from 'nodemailer'
 
 // Initialize Supabase with service role key for server-side operations
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
@@ -26,24 +26,6 @@ export async function POST(request: NextRequest) {
     // Generate the direct form link
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || request.headers.get('origin') || 'https://your-domain.vercel.app'
     const formLink = `${baseUrl}/form/${requestId}?direct=true`
-
-    // Initialize Resend
-    if (!process.env.RESEND_API_KEY) {
-      console.log('📧 W-9 Email would be sent to:', {
-        to: vendorEmail,
-        subject: `W-9 Form Request - ${vendorName}`,
-        formLink,
-        message: 'Email service not configured. Set RESEND_API_KEY environment variable.'
-      })
-
-      return NextResponse.json({ 
-        success: true, 
-        message: 'Email logged (configure RESEND_API_KEY for actual sending)',
-        formLink 
-      })
-    }
-
-    const resend = new Resend(process.env.RESEND_API_KEY)
 
     const emailHtml = `
       <!DOCTYPE html>
@@ -97,28 +79,56 @@ export async function POST(request: NextRequest) {
       </html>
     `
 
-    const { data, error } = await resend.emails.send({
-      from: process.env.FROM_EMAIL || 'delivered@resend.dev',
+    // Check for Gmail SMTP configuration
+    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+      console.log('📧 W-9 Email would be sent to:', {
+        to: vendorEmail,
+        subject: `W-9 Form Request - ${vendorName}`,
+        formLink,
+        message: 'Gmail SMTP not configured. Set GMAIL_USER and GMAIL_APP_PASSWORD environment variables.'
+      })
+
+      return NextResponse.json({
+        success: true,
+        message: 'Email logged (configure Gmail SMTP for actual sending)',
+        formLink
+      })
+    }
+
+    // Create Gmail transporter
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASSWORD
+      }
+    })
+
+    // Send email using Gmail SMTP
+    const mailOptions = {
+      from: `"TaxForms Pro" <${process.env.GMAIL_USER}>`,
       to: vendorEmail,
       subject: `W-9 Form Request - ${vendorName}`,
       html: emailHtml,
-    })
+    }
 
-    if (error) {
-      console.error('Resend error:', error)
+    try {
+      const info = await transporter.sendMail(mailOptions)
+      console.log('✅ W-9 Email sent successfully:', info.messageId)
+
+      return NextResponse.json({
+        success: true,
+        message: 'Email sent successfully',
+        emailId: info.messageId,
+        formLink
+      })
+    } catch (emailError) {
+      console.error('Gmail SMTP error:', emailError)
       return NextResponse.json(
-        { error: 'Failed to send email', details: error },
+        { error: 'Failed to send email', details: emailError },
         { status: 500 }
       )
     }
-
-    console.log('✅ W-9 Email sent successfully:', data)
-    return NextResponse.json({ 
-      success: true, 
-      message: 'Email sent successfully',
-      emailId: data?.id,
-      formLink 
-    })
 
   } catch (error) {
     console.error('Error sending W-9 email:', error)

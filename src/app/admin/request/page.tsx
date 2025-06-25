@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Send, Mail, Users, Lock, CheckCircle } from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext"
-import { createW9Request, generateDirectFormLink } from "@/lib/database"
+import { generateDirectFormLink } from "@/lib/database"
+import { supabase } from "@/lib/supabase"
 import { RequireAuth } from "@/components/AuthGuard"
 import Header from "@/components/Header"
 import { ButtonLoader } from "@/components/ui/loader"
@@ -28,7 +29,32 @@ export default function RequestW9Form() {
     setError('')
 
     try {
-      const request = await createW9Request(vendorName, vendorEmail, user.id)
+      // Get the user's session token for API authentication
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        throw new Error('No active session')
+      }
+
+      // Create W9 request via API
+      const createResponse = await fetch('/api/create-w9-request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`
+        },
+        body: JSON.stringify({
+          vendorName,
+          vendorEmail,
+          userId: user.id
+        }),
+      })
+
+      if (!createResponse.ok) {
+        const errorData = await createResponse.json()
+        throw new Error(errorData.error || 'Failed to create W9 request')
+      }
+
+      const { request } = await createResponse.json()
       await generateDirectFormLink(request.id)
       
       try {
