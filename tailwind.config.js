@@ -73,7 +73,7 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ['Inter', 'Noto Sans', 'IBM Plex Sans', 'Segoe UI', 'sans-serif'],
+        sans: ["var(--font-inter)", 'Noto Sans', 'IBM Plex Sans', 'Segoe UI', 'sans-serif'],
       },
       fontSize: {
         'xs': ['0.75rem', { lineHeight: '1rem' }],
