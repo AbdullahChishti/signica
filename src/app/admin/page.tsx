@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { Plus, TrendingUp, Users, CheckCircle, Clock, Download, Eye, Sparkles } from "lucide-react"
+import { Plus, TrendingUp, Users, CheckCircle, Clock, Download, Eye, Sparkles, Lock, Verified, Globe } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -88,44 +88,45 @@ export default function AdminDashboard() {
 
   return (
     <RequireAuth>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 relative overflow-hidden">
+        {/* Glassmorphic Floating Blurs & Grid */}
+        <div className="absolute inset-0 pointer-events-none z-0">
+          <div className="absolute top-10 left-10 w-80 h-80 bg-gradient-to-br from-blue-200/30 to-cyan-200/20 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-tr from-emerald-200/20 to-blue-100/20 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] h-[120vw] bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.04)_0%,transparent_70%)]"></div>
+        </div>
         <Header />
-
         {/* Main Content */}
-        <main className="container mx-auto px-6 py-12 lg:px-8 max-w-7xl">
-          
+        <main className="container mx-auto px-6 py-12 lg:px-8 max-w-7xl relative z-10">
           {/* Page Header */}
           <div className="mb-16 text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 to-blue-600/10 border border-primary/20 mb-6">
-              <Sparkles className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-primary">Mission Control</span>
+            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/40 backdrop-blur-xl border border-white/30 shadow mb-6">
+              <Lock className="w-5 h-5 text-emerald-600" />
+              <span className="text-sm font-semibold text-slate-700">256-bit Encrypted</span>
+              <span className="mx-2 text-slate-300">|</span>
+              <Verified className="w-5 h-5 text-blue-600" />
+              <span className="text-sm font-semibold text-slate-700">SOC 2</span>
+              <span className="mx-2 text-slate-300">|</span>
+              <Globe className="w-5 h-5 text-blue-600" />
+              <span className="text-sm font-semibold text-slate-700">GDPR Ready</span>
             </div>
-
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              W-9 Command
-              <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent block">
-                Center
-              </span>
+            <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-4 leading-tight">
+              W-9 Command Center
             </h1>
-            
-            <p className="text-xl text-gray-600/90 mb-12 max-w-xl mx-auto leading-relaxed font-medium">
+            <p className="text-xl text-slate-800/80 font-light mb-10">
               Your mission control for W-9s. <span className="text-gray-700">Track, monitor, celebrate.</span>
             </p>
-
             <Link href="/admin/request">
               <Button 
                 size="lg" 
-                className="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white font-medium px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 group"
+                className="bg-gradient-to-r from-blue-700 to-cyan-600 text-white font-semibold px-12 py-5 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group text-lg"
               >
                 <Plus className="w-5 h-5 mr-2" />
                 Create New Request
-                <div className="ml-2 group-hover:translate-x-0.5 transition-transform">
-                  →
-                </div>
+                <span className="ml-2 group-hover:translate-x-0.5 transition-transform">→</span>
               </Button>
             </Link>
           </div>
-
           {/* Error Message */}
           {error && (
             <div 
@@ -146,120 +147,72 @@ export default function AdminDashboard() {
               </button>
             </div>
           )}
-
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            
             {/* Total Requests Card */}
             <div 
-              className="bg-white/90 backdrop-blur-sm border border-gray-200/60 rounded-3xl p-8 group hover:scale-105 transition-all duration-300"
-              style={{
-                boxShadow: `
-                  0 25px 50px -12px rgba(0, 0, 0, 0.15),
-                  0 10px 20px -8px rgba(0, 0, 0, 0.1),
-                  0 4px 15px -3px rgba(0, 0, 0, 0.05)
-                `
-              }}
+              className="bg-white/30 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-lg flex flex-col items-center text-center"
+              style={{ boxShadow: '0 25px 50px -12px rgba(0,0,0,0.10)' }}
             >
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-primary/20 to-blue-600/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <TrendingUp className="w-8 h-8 text-primary" />
-                </div>
-                <div className="text-right">
-                  <p className="text-sm font-medium text-gray-500 mb-1">Total Requests</p>
-                  <p className="text-4xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-                    {stats.total}
-                  </p>
-                </div>
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-100/60 to-cyan-100/60 flex items-center justify-center mb-4 shadow">
+                <TrendingUp className="w-7 h-7 text-blue-700" />
               </div>
-              <p className="text-sm text-gray-600">
+              <div className="text-4xl font-bold bg-gradient-to-r from-blue-700 to-cyan-600 bg-clip-text text-transparent mb-2">{stats.total}</div>
+              <div className="text-sm text-slate-600">Total Requests</div>
+              <div className="text-xs text-slate-500 mt-2">
                 {stats.total > 0 
                   ? `${Math.round((stats.completed / stats.total) * 100)}% completion rate`
                   : "Ready to start collecting"
                 }
-              </p>
+              </div>
             </div>
-
             {/* Completed Card */}
             <div 
-              className="bg-white/90 backdrop-blur-sm border border-gray-200/60 rounded-3xl p-8 group hover:scale-105 transition-all duration-300"
-              style={{
-                boxShadow: `
-                  0 25px 50px -12px rgba(0, 0, 0, 0.15),
-                  0 10px 20px -8px rgba(0, 0, 0, 0.1),
-                  0 4px 15px -3px rgba(0, 0, 0, 0.05)
-                `
-              }}
+              className="bg-white/30 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-lg flex flex-col items-center text-center"
+              style={{ boxShadow: '0 25px 50px -12px rgba(0,0,0,0.10)' }}
             >
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-green-100 to-emerald-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <CheckCircle className="w-8 h-8 text-green-600" />
-                </div>
-                <div className="text-right">
-                  <p className="text-sm font-medium text-gray-500 mb-1">Completed</p>
-                  <p className="text-4xl font-bold text-green-600">
-                    {stats.completed}
-                  </p>
-                </div>
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-green-100/60 to-emerald-100/60 flex items-center justify-center mb-4 shadow">
+                <CheckCircle className="w-7 h-7 text-green-600" />
               </div>
-              <p className="text-sm text-gray-600">
+              <div className="text-4xl font-bold text-green-600 mb-2">{stats.completed}</div>
+              <div className="text-sm text-slate-600">Completed</div>
+              <div className="text-xs text-slate-500 mt-2">
                 {stats.completed > 0 
                   ? "Ready for download"
                   : "Waiting for completions"
                 }
-              </p>
+              </div>
             </div>
-
             {/* Pending Card */}
             <div 
-              className="bg-white/90 backdrop-blur-sm border border-gray-200/60 rounded-3xl p-8 group hover:scale-105 transition-all duration-300"
-              style={{
-                boxShadow: `
-                  0 25px 50px -12px rgba(0, 0, 0, 0.15),
-                  0 10px 20px -8px rgba(0, 0, 0, 0.1),
-                  0 4px 15px -3px rgba(0, 0, 0, 0.05)
-                `
-              }}
+              className="bg-white/30 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-lg flex flex-col items-center text-center"
+              style={{ boxShadow: '0 25px 50px -12px rgba(0,0,0,0.10)' }}
             >
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-amber-100 to-yellow-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <Clock className="w-8 h-8 text-amber-600" />
-                </div>
-                <div className="text-right">
-                  <p className="text-sm font-medium text-gray-500 mb-1">Pending</p>
-                  <p className="text-4xl font-bold text-amber-600">
-                    {stats.pending}
-                  </p>
-                </div>
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-amber-100/60 to-yellow-100/60 flex items-center justify-center mb-4 shadow">
+                <Clock className="w-7 h-7 text-amber-600" />
               </div>
-              <p className="text-sm text-gray-600">
+              <div className="text-4xl font-bold text-amber-600 mb-2">{stats.pending}</div>
+              <div className="text-sm text-slate-600">Pending</div>
+              <div className="text-xs text-slate-500 mt-2">
                 {stats.pending > 0 
                   ? "Awaiting vendor response"
                   : "All caught up!"
                 }
-              </p>
+              </div>
             </div>
           </div>
-
           {/* Requests Table */}
           <div 
-            className="bg-white/90 backdrop-blur-sm border border-gray-200/60 rounded-3xl overflow-hidden"
-            style={{
-              boxShadow: `
-                0 25px 50px -12px rgba(0, 0, 0, 0.25),
-                0 10px 20px -8px rgba(0, 0, 0, 0.15),
-                0 4px 15px -3px rgba(0, 0, 0, 0.1)
-              `
-            }}
+            className="bg-white/30 backdrop-blur-xl border border-white/20 rounded-3xl overflow-hidden shadow-lg"
+            style={{ boxShadow: '0 25px 50px -12px rgba(0,0,0,0.10)' }}
           >
             {/* Table Header */}
             <div className="px-8 py-6 border-b border-gray-200/60 bg-gradient-to-r from-gray-50/50 to-gray-100/50">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Recent Requests</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-2">Recent Requests</h2>
               <p className="text-gray-600">
                 Track the status of all W-9 form requests
               </p>
             </div>
-
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
