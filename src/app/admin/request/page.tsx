@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Send, Sparkles, Mail, Shield, Zap, Clock, CheckCircle, HelpCircle, FileText, Users } from "lucide-react"
+import { Send, Sparkles, Mail, Shield, Zap, Clock, CheckCircle, HelpCircle, FileText, Users, Lock, Verified, Globe } from "lucide-react"
 import Link from "next/link"
 import { useAuth } from "@/contexts/AuthContext"
 import { createW9Request, generateDirectFormLink } from "@/lib/database"
@@ -82,296 +82,151 @@ export default function RequestW9Form() {
   // Auth guard handles this
   return (
     <RequireAuth>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 relative overflow-hidden">
+        {/* Glassmorphic floating blurs & mesh background */}
+        <div className="absolute inset-0 pointer-events-none z-0">
+          <div className="absolute top-10 left-10 w-72 h-72 bg-gradient-to-br from-blue-200/30 to-cyan-200/20 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-20 w-80 h-80 bg-gradient-to-tr from-emerald-200/20 to-blue-100/20 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[100vw] bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.04)_0%,transparent_70%)]"></div>
+        </div>
         <Header />
-
-        {/* Main Content */}
-        <main className="container mx-auto px-6 py-12 lg:px-8 max-w-7xl">
-          
-          {/* Page Header */}
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 to-blue-600/10 border border-primary/20 mb-6">
-              <Sparkles className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-primary">Launch Mission</span>
-            </div>
-
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Launch W-9
-              <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent block">
-                Request
-              </span>
-            </h1>
-            
-            <p className="text-xl text-gray-600/90 mb-12 max-w-xl mx-auto leading-relaxed font-medium">
-              Fire off W-9 requests in seconds. <span className="text-gray-700">Secure links, instant peace of mind.</span>
-            </p>
+        <main className="relative min-h-[80vh] flex flex-col lg:flex-row items-stretch justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50/40 overflow-hidden">
+          {/* Animated mesh/blur background */}
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            <div className="absolute top-0 left-0 w-2/3 h-2/3 bg-gradient-to-br from-blue-200/40 to-cyan-200/20 rounded-full blur-3xl animate-pulse-slow"></div>
+            <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tr from-emerald-200/30 to-blue-100/20 rounded-full blur-3xl"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] h-[120vw] bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.06)_0%,transparent_70%)]"></div>
           </div>
-
-          {/* Two Column Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 max-w-7xl mx-auto">
-            
-            {/* Left Column - Information */}
-            <div className="space-y-8">
-              
-              {/* How it works section */}
-              <div 
-                className="bg-white/90 backdrop-blur-sm border border-gray-200/60 rounded-3xl p-8"
-                style={{
-                  boxShadow: `
-                    0 25px 50px -12px rgba(0, 0, 0, 0.15),
-                    0 10px 20px -8px rgba(0, 0, 0, 0.1),
-                    0 4px 15px -3px rgba(0, 0, 0, 0.05)
-                  `
-                }}
-              >
-                <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-primary/20 to-blue-600/20 flex items-center justify-center mr-4">
-                    <HelpCircle className="w-6 h-6 text-primary" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900">How it works</h3>
-                </div>
-                
-                <div className="space-y-6">
-                  <div className="flex items-start space-x-4">
-                    <div 
-                      className="w-10 h-10 rounded-2xl bg-gradient-to-r from-primary to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg"
-                    >
-                      <span className="text-sm font-bold text-white">1</span>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-2 text-lg">Email Delivery</h4>
-                      <p className="text-gray-600/90 leading-relaxed font-medium">Secure email with personalized link</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start space-x-4">
-                    <div 
-                      className="w-10 h-10 rounded-2xl bg-gradient-to-r from-primary to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg"
-                    >
-                      <span className="text-sm font-bold text-white">2</span>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-2 text-lg">Secure Completion</h4>
-                      <p className="text-gray-600/90 leading-relaxed font-medium">Bank-level security, zero friction</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start space-x-4">
-                    <div 
-                      className="w-10 h-10 rounded-2xl bg-gradient-to-r from-primary to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg"
-                    >
-                      <span className="text-sm font-bold text-white">3</span>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-2 text-lg">Instant Notification</h4>
-                      <p className="text-gray-600/90 leading-relaxed font-medium">IRS-ready PDF, delivered instantly</p>
-                    </div>
-                  </div>
-                </div>
+          {/* Left: Mission Control Visual Panel */}
+          <section className="relative z-10 flex-1 flex flex-col justify-between px-6 py-12 lg:py-20 max-w-xl mx-auto lg:mx-0">
+            {/* Hero */}
+            <div>
+              <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-white/60 backdrop-blur border border-white/30 shadow mb-8">
+                <Shield className="w-6 h-6 text-blue-600" />
+                <span className="text-base font-semibold text-slate-800 tracking-wide">Mission Control</span>
               </div>
-
-              {/* Features */}
-              <div 
-                className="bg-white/90 backdrop-blur-sm border border-gray-200/60 rounded-3xl p-8"
-                style={{
-                  boxShadow: `
-                    0 25px 50px -12px rgba(0, 0, 0, 0.15),
-                    0 10px 20px -8px rgba(0, 0, 0, 0.1),
-                    0 4px 15px -3px rgba(0, 0, 0, 0.05)
-                  `
-                }}
-              >
-                <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-green-100 to-emerald-100 flex items-center justify-center mr-4">
-                    <Shield className="w-6 h-6 text-green-600" />
+              <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4 leading-tight">
+                Launch a <span className="bg-gradient-to-r from-blue-700 via-cyan-600 to-emerald-500 bg-clip-text text-transparent">W-9 Mission</span>
+              </h1>
+              <p className="text-lg text-slate-700/90 font-light mb-10 max-w-md">
+                Securely request W-9s from vendors in seconds. <span className="text-gray-700 font-medium">Enterprise-grade, effortless, encrypted.</span>
+              </p>
+            </div>
+            {/* Stepper */}
+            <div className="flex flex-col items-start gap-0 relative pl-2 mb-10">
+              <div className="absolute left-6 top-8 bottom-8 w-1 bg-gradient-to-b from-blue-200 via-cyan-200 to-emerald-200 opacity-60 rounded-full"></div>
+              {[
+                { icon: Mail, title: "Send Secure Link", desc: "Personalized W-9 request sent instantly." },
+                { icon: Shield, title: "Bank-Grade Security", desc: "Encrypted, IRS-compliant, zero friction." },
+                { icon: CheckCircle, title: "Get IRS-Ready PDF", desc: "Completed W-9 delivered to your dashboard." }
+              ].map((step, i) => (
+                <div key={i} className="flex items-center mb-8 last:mb-0 relative z-10">
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center shadow-lg bg-gradient-to-br ${i === 0 ? 'from-blue-600 to-cyan-500' : i === 1 ? 'from-cyan-500 to-emerald-400' : 'from-emerald-400 to-blue-400'} text-white mr-5`}>
+                    <step.icon className="w-6 h-6" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900">Why Signica rocks</h3>
+                  <div>
+                    <div className="text-lg font-bold text-slate-900 mb-1">{step.title}</div>
+                    <div className="text-sm text-slate-600 font-medium">{step.desc}</div>
+                  </div>
                 </div>
-                
-                <div className="space-y-4">
-                  {[
-                    { icon: Shield, text: "Bank-level security & encryption" },
-                    { icon: FileText, text: "IRS compliant form generation" },
-                    { icon: Mail, text: "Automated email reminders" },
-                    { icon: Zap, text: "Real-time status tracking" }
-                  ].map((feature, index) => (
-                    <div key={index} className="flex items-center space-x-4 group">
-                      <div className="w-8 h-8 rounded-xl bg-green-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
-                        <feature.icon className="w-4 h-4 text-green-600" />
-                      </div>
-                      <span className="text-gray-700 font-medium">{feature.text}</span>
-                    </div>
-                  ))}
-                </div>
+              ))}
+            </div>
+            {/* Trust badges row */}
+            <div className="flex items-center gap-4 mt-auto pt-8 border-t border-slate-100">
+              <div className="flex items-center gap-2 px-4 py-1 rounded-full bg-white/70 backdrop-blur border border-white/30 shadow-sm">
+                <Lock className="w-4 h-4 text-emerald-600" />
+                <span className="text-xs font-semibold text-slate-700">256-bit Encrypted</span>
               </div>
-
-              {/* Support */}
-              <div 
-                className="bg-white/90 backdrop-blur-sm border border-gray-200/60 rounded-3xl p-8"
-                style={{
-                  boxShadow: `
-                    0 25px 50px -12px rgba(0, 0, 0, 0.15),
-                    0 10px 20px -8px rgba(0, 0, 0, 0.1),
-                    0 4px 15px -3px rgba(0, 0, 0, 0.05)
-                  `
-                }}
-              >
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-purple-100 to-pink-100 flex items-center justify-center mr-4">
-                    <Users className="w-6 h-6 text-purple-600" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900">Need help?</h3>
-                </div>
-                
-                <p className="text-gray-600/90 mb-6 leading-relaxed font-medium">
-                  Questions about W-9 requests? <span className="text-gray-700">We're here to help.</span>
-                </p>
-                
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <Button 
-                    variant="outline" 
-                    className="border-2 border-primary/20 text-primary hover:border-primary hover:bg-primary/5 rounded-xl transition-all duration-200"
-                  >
-                    Contact Support
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    className="border-2 border-primary/20 text-primary hover:border-primary hover:bg-primary/5 rounded-xl transition-all duration-200"
-                  >
-                    View Documentation
-                  </Button>
-                </div>
+              <div className="flex items-center gap-2 px-4 py-1 rounded-full bg-white/70 backdrop-blur border border-white/30 shadow-sm">
+                <Verified className="w-4 h-4 text-blue-600" />
+                <span className="text-xs font-semibold text-slate-700">SOC 2</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-1 rounded-full bg-white/70 backdrop-blur border border-white/30 shadow-sm">
+                <Globe className="w-4 h-4 text-blue-600" />
+                <span className="text-xs font-semibold text-slate-700">GDPR Ready</span>
               </div>
             </div>
-
-            {/* Right Column - Form */}
-            <div className="lg:sticky lg:top-24 lg:self-start">
-              <div 
-                className="bg-white/90 backdrop-blur-sm border border-gray-200/60 rounded-3xl p-8 relative overflow-hidden"
-                style={{
-                  boxShadow: `
-                    0 25px 50px -12px rgba(0, 0, 0, 0.25),
-                    0 10px 20px -8px rgba(0, 0, 0, 0.15),
-                    0 4px 15px -3px rgba(0, 0, 0, 0.1)
-                  `
-                }}
-              >
-                {/* Decorative Elements */}
-                <div className="absolute -top-6 -right-6 w-24 h-24 bg-gradient-to-r from-primary/10 to-blue-600/10 rounded-full blur-xl"></div>
-                <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-r from-purple/5 to-pink/5 rounded-full blur-2xl"></div>
-
-                <div className="relative">
-                  <div className="mb-8 text-center">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-primary/20 to-blue-600/20 flex items-center justify-center mx-auto mb-4">
-                      <Send className="w-8 h-8 text-primary" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Request Details</h3>
-                    <p className="text-gray-600/90 font-medium">Enter vendor info to <span className="text-gray-700">launch request</span></p>
+          </section>
+          {/* Right: Floating Glassmorphic Form Card */}
+          <section className="relative z-10 flex-1 flex flex-col justify-center items-center px-6 py-12 lg:py-20">
+            <div className="relative w-full max-w-md mx-auto">
+              {/* Floating blur accents */}
+              <div className="absolute -top-8 -right-8 w-24 h-24 bg-gradient-to-r from-blue-200/30 to-cyan-200/20 rounded-full blur-2xl opacity-40"></div>
+              <div className="absolute -bottom-8 -left-8 w-28 h-28 bg-gradient-to-tr from-emerald-200/20 to-blue-100/20 rounded-full blur-2xl opacity-30"></div>
+              <div className="bg-white/90 backdrop-blur-xl border border-gray-200/60 rounded-3xl p-10 shadow-2xl relative overflow-visible">
+                <h2 className="text-2xl font-bold text-slate-900 mb-8 text-center">Request Details</h2>
+                {error && (
+                  <div className="mb-6 p-4 rounded-2xl bg-red-50/80 backdrop-blur-sm border border-red-200/60 text-red-700 text-center font-medium">
+                    {error}
                   </div>
-
-                  {/* Error Message */}
-                  {error && (
-                    <div 
-                      className="mb-6 p-4 rounded-2xl bg-red-50/80 backdrop-blur-sm border border-red-200/60"
-                      style={{
-                        boxShadow: `
-                          0 10px 25px -5px rgba(239, 68, 68, 0.1),
-                          0 4px 10px -2px rgba(239, 68, 68, 0.05)
-                        `
-                      }}
-                    >
-                      <p className="text-red-700 font-medium">{error}</p>
+                )}
+                <form onSubmit={handleSubmit} className="space-y-8">
+                  <div>
+                    <Label htmlFor="vendorName" className="block text-base font-semibold text-slate-900 mb-2">Vendor Name</Label>
+                    <div className="relative">
+                      <Input
+                        id="vendorName"
+                        type="text"
+                        value={vendorName}
+                        onChange={e => setVendorName(e.target.value)}
+                        className="w-full px-6 py-4 rounded-2xl border-2 border-gray-200/60 bg-white/50 backdrop-blur-sm text-slate-900 placeholder-gray-400 focus:border-primary focus:bg-white transition-all duration-200 focus:shadow-lg font-medium text-lg pl-12"
+                        placeholder="Acme Corporation"
+                        required
+                      />
+                      <Users className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
                     </div>
-                  )}
-
-                  <form className="space-y-6" onSubmit={handleSubmit}>
-                    {/* Vendor Name Field */}
-                    <div className="space-y-3">
-                      <Label htmlFor="vendorName" className="text-sm font-semibold text-gray-900">
-                        Vendor/Contractor Name
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          id="vendorName"
-                          type="text"
-                          placeholder="Enter the full legal name"
-                          className="w-full rounded-2xl border-2 border-gray-200/60 bg-white/50 backdrop-blur-sm px-4 py-4 text-base font-medium placeholder:text-gray-400 focus:border-primary focus:bg-white transition-all duration-200 focus:shadow-lg"
-                          value={vendorName}
-                          onChange={(e) => setVendorName(e.target.value)}
-                          required
-                        />
-                        <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                          <Users className="w-5 h-5 text-gray-400" />
-                        </div>
-                      </div>
-                      <p className="text-xs text-gray-500/80 font-medium">Legal business or full name</p>
+                  </div>
+                  <div>
+                    <Label htmlFor="vendorEmail" className="block text-base font-semibold text-slate-900 mb-2">Vendor Email</Label>
+                    <div className="relative">
+                      <Input
+                        id="vendorEmail"
+                        type="email"
+                        value={vendorEmail}
+                        onChange={e => setVendorEmail(e.target.value)}
+                        className="w-full px-6 py-4 rounded-2xl border-2 border-gray-200/60 bg-white/50 backdrop-blur-sm text-slate-900 placeholder-gray-400 focus:border-primary focus:bg-white transition-all duration-200 focus:shadow-lg font-medium text-lg pl-12"
+                        placeholder="vendor@email.com"
+                        required
+                      />
+                      <Mail className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
                     </div>
-
-                    {/* Vendor Email Field */}
-                    <div className="space-y-3">
-                      <Label htmlFor="vendorEmail" className="text-sm font-semibold text-gray-900">
-                        Email Address
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          id="vendorEmail"
-                          type="email"
-                          placeholder="vendor@company.com"
-                          className="w-full rounded-2xl border-2 border-gray-200/60 bg-white/50 backdrop-blur-sm px-4 py-4 text-base font-medium placeholder:text-gray-400 focus:border-primary focus:bg-white transition-all duration-200 focus:shadow-lg"
-                          value={vendorEmail}
-                          onChange={(e) => setVendorEmail(e.target.value)}
-                          required
-                        />
-                        <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                          <Mail className="w-5 h-5 text-gray-400" />
-                        </div>
-                      </div>
-                      <p className="text-xs text-gray-500/80 font-medium">W-9 link destination</p>
-                    </div>
-
-                    {/* Send Request Button */}
-                    <div className="pt-6">
-                      <Button 
-                        type="submit"
-                        disabled={isLoading || !vendorName || !vendorEmail}
-                        className="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white font-semibold px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 group"
-                      >
-                        {isLoading ? (
-                          <>
-                            <ButtonLoader size="sm" />
-                            Launching Mission...
-                          </>
-                        ) : (
-                          <>
-                            <Send className="w-5 h-5 mr-3 group-hover:translate-x-0.5 transition-transform" />
-                            Launch Mission
-                          </>
-                        )}
-                      </Button>
-                    </div>
-
-                    {/* Quick Stats */}
-                    <div className="pt-6 border-t border-gray-200/60">
-                      <div className="grid grid-cols-3 gap-4 text-center">
-                        <div>
-                          <div className="text-2xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">2min</div>
-                          <div className="text-xs text-gray-500 font-medium">Average setup</div>
-                        </div>
-                        <div>
-                          <div className="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">99%</div>
-                          <div className="text-xs text-gray-500 font-medium">Completion rate</div>
-                        </div>
-                        <div>
-                          <div className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">24h</div>
-                          <div className="text-xs text-gray-500 font-medium">Average response</div>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
+                  </div>
+                  <Button
+                    type="submit"
+                    size="lg"
+                    disabled={isLoading}
+                    className="w-full bg-gradient-to-r from-blue-700 to-cyan-600 text-white font-semibold py-5 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group text-lg flex items-center justify-center animate-glow"
+                  >
+                    {isLoading ? (
+                      <>
+                        <ButtonLoader size="sm" />
+                        Launching Mission...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
+                        Launch Mission
+                      </>
+                    )}
+                  </Button>
+                </form>
+                {/* Stat/Badge below form */}
+                <div className="mt-8 flex justify-center">
+                  <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-gradient-to-r from-blue-100/60 to-cyan-100/60 border border-blue-200/40 text-blue-700 font-semibold text-sm shadow-sm">
+                    <CheckCircle className="w-4 h-4 text-emerald-600" />
+                    99% Completion Rate
+                  </div>
                 </div>
               </div>
+              {/* Support link below form */}
+              <div className="mt-6 text-center">
+                <Link href="/support" className="inline-flex items-center gap-2 text-blue-600 hover:underline text-sm font-medium">
+                  <Users className="w-4 h-4" />
+                  Need help? Contact support
+                </Link>
+              </div>
             </div>
-          </div>
+          </section>
         </main>
       </div>
     </RequireAuth>
