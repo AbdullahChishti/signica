@@ -2,171 +2,68 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
-import type { User as SupabaseUser } from '@supabase/supabase-js'
-import { useRouter } from 'next/navigation'
 
 interface User {
   id: string
   email: string
-  name: string
 }
 
 interface AuthContextType {
   user: User | null
-  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>
-  logout: () => Promise<void>
-  isLoading: boolean
-  isInitialized: boolean
+  loading: boolean
+  signIn: (email: string, password: string) => Promise<void>
+  signOut: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [isInitialized, setIsInitialized] = useState(false)
-  const router = useRouter()
+  const [loading, setLoading] = useState(true)
 
-  console.log(`🔄 AUTH_CONTEXT: Render - user: ${user?.email || 'null'}, loading: ${isLoading}, initialized: ${isInitialized}`)
-
-  // Simple initialization - just check if user exists
   useEffect(() => {
-    console.log(`🚀 AUTH_CONTEXT: Starting simple initialization`)
-    
-    let mounted = true
-
-    const initialize = async () => {
-      try {
-        console.log(`🔍 AUTH_CONTEXT: Getting current session`)
-        const { data: { session } } = await supabase.auth.getSession()
-
-        if (mounted) {
-          if (session?.user) {
-            console.log(`✅ AUTH_CONTEXT: Session found for ${session.user.email}`)
-            setUser({
-              id: session.user.id,
-              email: session.user.email!,
-              name: session.user.email?.split('@')[0] || 'User'
-            })
-          } else {
-            console.log(`❌ AUTH_CONTEXT: No session found`)
-            setUser(null)
-          }
-        }
-      } catch (error) {
-        console.error('❌ AUTH_CONTEXT: Error during initialization:', error)
-        if (mounted) {
-          setUser(null)
-        }
-      } finally {
-        if (mounted) {
-          console.log(`✅ AUTH_CONTEXT: Initialization complete`)
-          setIsInitialized(true)
-        }
-      }
-    }
-
-    // Initialize immediately
-    initialize()
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log(`🔔 AUTH_CONTEXT: Auth state changed - ${event}`)
-      
-      if (!mounted) return
-
+    // Check initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
-        console.log(`👤 AUTH_CONTEXT: Setting user from auth change`)
-        setUser({
-          id: session.user.id,
-          email: session.user.email!,
-          name: session.user.email?.split('@')[0] || 'User'
-        })
-      } else {
-        console.log(`🚫 AUTH_CONTEXT: Clearing user from auth change`)
-        setUser(null)
+        setUser({ id: session.user.id, email: session.user.email! })
       }
+      setLoading(false)
     })
 
-    return () => {
-      console.log(`🧹 AUTH_CONTEXT: Cleanup`)
-      mounted = false
-      subscription.unsubscribe()
-    }
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (session?.user) {
+          setUser({ id: session.user.id, email: session.user.email! })
+        } else {
+          setUser(null)
+        }
+        setLoading(false)
+      }
+    )
+
+    return () => subscription.unsubscribe()
   }, [])
 
-  const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
-    console.log(`🔐 AUTH_CONTEXT: Login attempt for ${email}`)
-    
-    setIsLoading(true)
-
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
-        password: password
-      })
-
-      if (error) {
-        console.error(`❌ AUTH_CONTEXT: Login error - ${error.message}`)
-        setIsLoading(false)
-        
-        if (error.message.includes('Invalid login credentials')) {
-          return { success: false, error: 'Invalid email or password' }
-        }
-        if (error.message.includes('Email not confirmed')) {
-          return { success: false, error: 'Please confirm your email address' }
-        }
-        
-        return { success: false, error: error.message }
-      }
-
-      if (data.user) {
-        console.log(`✅ AUTH_CONTEXT: Login successful for ${data.user.email}`)
-        // User will be set by the auth state change listener
-        setIsLoading(false)
-        return { success: true }
-      }
-
-      setIsLoading(false)
-      return { success: false, error: 'Login failed' }
-    } catch (error: any) {
-      console.error('❌ AUTH_CONTEXT: Login error:', error)
-      setIsLoading(false)
-      return { success: false, error: 'An unexpected error occurred' }
-    }
+  const signIn = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) throw error
   }
 
-  const logout = async () => {
-    console.log(`👋 AUTH_CONTEXT: Logout initiated`)
-    
-    try {
-      setIsLoading(true)
-      await supabase.auth.signOut()
-      setUser(null)
-      router.push('/')
-    } catch (error) {
-      console.error('❌ AUTH_CONTEXT: Logout error:', error)
-    } finally {
-      setIsLoading(false)
-    }
+  const signOut = async () => {
+    await supabase.auth.signOut()
   }
 
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      login, 
-      logout, 
-      isLoading, 
-      isInitialized
-    }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   )
 }
 
-export function useAuth() {
+export const useAuth = () => {
   const context = useContext(AuthContext)
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useAuth must be used within an AuthProvider')
   }
   return context
