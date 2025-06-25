@@ -109,10 +109,10 @@ export default function SignUpPage() {
                   <Sparkles className="w-4 h-4 text-primary" />
                   <span className="text-sm font-medium text-primary">Join the mission</span>
                 </div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-3">
+                <h1 className="text-3xl md:text-4xl font-semibold text-slate-800/90 mb-3">
                   Create account
                 </h1>
-                <p className="text-gray-600/90 font-medium">
+                <p className="text-xl text-slate-800/80 font-normal mt-2">
                   Start collecting W-9s <span className="text-gray-700">like a pro</span>
                 </p>
               </div>

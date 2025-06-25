@@ -104,10 +104,10 @@ function LoginForm() {
             
             {/* Header Section */}
             <div className="text-center mb-10">
-              <h1 className="text-3xl font-bold text-gray-900 mb-3">
+              <h1 className="text-3xl md:text-4xl font-light text-slate-800/90 mb-3">
                 Welcome back
               </h1>
-              <p className="text-gray-600/90 font-medium">
+              <p className="text-xl text-slate-800/80 font-light mt-2">
                 Sign in to your <span className="text-gray-700">command center</span>
               </p>
             </div>
