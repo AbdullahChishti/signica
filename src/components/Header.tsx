@@ -8,12 +8,9 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LogOut, Settings, Shield, Send, FileText, LucideIcon, User, Sparkles } from 'lucide-react';
+import { LogOut, Settings, Shield, Send, FileText, LucideIcon, Sparkles } from 'lucide-react';
 
 interface NavItem {
   name: string;
@@ -30,10 +27,10 @@ interface PageContext {
 
 export default function Header() {
   const pathname = usePathname();
-  const { user, logout, isInitialized } = useAuth();
+  const { user, loading, signOut } = useAuth();
 
   const handleLogout = async () => {
-    await logout();
+    await signOut();
   };
 
   // Determine page context and navigation
@@ -174,19 +171,16 @@ export default function Header() {
               </div>
             )}
 
-            {isInitialized && user ? (
+            {!loading && user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button 
                     variant="ghost" 
                     className="relative h-12 w-12 rounded-2xl hover:bg-primary/5 transition-all duration-200 group"
                   >
-                    <Avatar className="h-10 w-10 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all duration-200">
-                      <AvatarImage src={`https://avatar.vercel.sh/${user.email}.png`} alt={user.name} />
-                      <AvatarFallback className="bg-gradient-to-r from-primary to-blue-600 text-white font-semibold">
-                        {user.name?.charAt(0).toUpperCase() || 'U'}
-                      </AvatarFallback>
-                    </Avatar>
+                    <div className="h-10 w-10 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all duration-200 rounded-full bg-gradient-to-r from-primary to-blue-600 flex items-center justify-center text-white font-semibold">
+                      {user.email?.charAt(0).toUpperCase() || 'U'}
+                    </div>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent 
@@ -205,15 +199,12 @@ export default function Header() {
                   {/* Profile Header */}
                   <div className="bg-gradient-to-r from-gray-50/80 to-gray-100/80 p-6 border-b border-gray-200/60">
                     <div className="flex items-center space-x-4">
-                      <Avatar className="h-14 w-14 ring-2 ring-primary/30">
-                        <AvatarImage src={`https://avatar.vercel.sh/${user.email}.png`} alt={user.name} />
-                        <AvatarFallback className="bg-gradient-to-r from-primary to-blue-600 text-white font-bold text-lg">
-                          {user.name?.charAt(0).toUpperCase() || 'U'}
-                        </AvatarFallback>
-                      </Avatar>
+                      <div className="h-14 w-14 ring-2 ring-primary/30 rounded-full bg-gradient-to-r from-primary to-blue-600 flex items-center justify-center text-white font-bold text-lg">
+                        {user.email?.charAt(0).toUpperCase() || 'U'}
+                      </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <p className="text-lg font-bold text-gray-900 truncate">{user.name}</p>
+                          <p className="text-lg font-bold text-gray-900 truncate">{user.email.split('@')[0]}</p>
                           <div className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-green-100/80 border border-green-200/60">
                             <Sparkles className="w-3 h-3 text-green-600" />
                             <span className="text-xs font-semibold text-green-700">Pro</span>
